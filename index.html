@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Topper Smart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#1A140F; --panel:#241C15; --panelLight:#2E241A; --border:#3D3024;
+    --gold:#D4A44C; --goldDim:#8C6D33; --teal:#2F8F84; --brick:#A64B3A;
+    --cream:#F0E6D2; --creamDim:#B8AA92;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--cream);font-family:'Tajawal',sans-serif;}
+  ::-webkit-scrollbar{width:8px;}
+  ::-webkit-scrollbar-thumb{background:var(--goldDim);border-radius:4px;}
+  .app{display:flex;min-height:100vh;}
+  .sidebar{width:240px;background:var(--panel);border-left:1px solid var(--border);padding:20px;display:flex;flex-direction:column;flex-shrink:0;}
+  @media (max-width:768px){
+    .sidebar{width:76px;padding:12px;}
+    .sidebar .label, .sidebar .brand-text, .sidebar .user-text{display:none;}
+  }
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:32px;justify-content:center;}
+  @media (min-width:769px){.brand{justify-content:flex-start;}}
+  .brand-text .title{font-family:'Cairo',sans-serif;font-weight:800;font-size:18px;}
+  .brand-text .sub{color:var(--goldDim);font-size:12px;}
+  nav{display:flex;flex-direction:column;gap:4px;}
+  nav button{display:flex;align-items:center;gap:12px;padding:12px 14px;border:none;border-right:3px solid transparent;
+    background:transparent;color:var(--creamDim);font-family:'Tajawal',sans-serif;font-size:14px;border-radius:12px;
+    cursor:pointer;text-align:right;width:100%;justify-content:center;}
+  @media (min-width:769px){nav button{justify-content:flex-start;}}
+  nav button.active{background:var(--panelLight);color:var(--gold);border-right-color:var(--gold);}
+  nav button .icon{font-size:16px;}
+  .user-row{margin-top:auto;padding-top:20px;display:flex;align-items:center;gap:10px;justify-content:center;color:var(--creamDim);}
+  @media (min-width:769px){.user-row{justify-content:flex-start;}}
+  .avatar{width:34px;height:34px;border-radius:999px;background:var(--goldDim);display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;color:var(--cream);}
+  .main{flex:1;padding:20px;overflow-x:hidden;}
+  @media (min-width:769px){.main{padding:40px;}}
+  .section{display:none;flex-direction:column;gap:24px;max-width:1200px;}
+  .section.active{display:flex;}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px;}
+  h1.page-title{font-family:'Cairo',sans-serif;font-weight:800;font-size:24px;margin:0;}
+  .hero{display:flex;justify-content:space-between;align-items:center;gap:20px;border-radius:24px;padding:32px;
+    background:linear-gradient(135deg,var(--panel),var(--panelLight));border:1px solid var(--border);flex-wrap:wrap;}
+  .hero h1{font-family:'Cairo',sans-serif;font-weight:800;font-size:26px;margin:4px 0;}
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (min-width:1024px){.stats{grid-template-columns:repeat(4,1fr);}}
+  .stat-label{font-size:12px;color:var(--creamDim);display:flex;justify-content:space-between;align-items:center;}
+  .stat-value{font-family:'Cairo',sans-serif;font-size:28px;font-weight:800;margin-top:10px;}
+  .stat-sub{font-size:12px;margin-top:6px;}
+  .chat-window{display:flex;flex-direction:column;height:75vh;background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+  .chat-header{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+  .chat-header .status{color:var(--teal);font-size:12px;}
+  .key-row{margin-inline-start:auto;display:flex;gap:6px;align-items:center;}
+  .key-row input{background:var(--panelLight);border:1px solid var(--border);border-radius:8px;color:var(--cream);font-size:11px;padding:6px 8px;width:130px;}
+  .key-row button{font-size:11px;padding:6px 10px;border-radius:8px;background:var(--panelLight);color:var(--gold);border:1px solid var(--goldDim);cursor:pointer;}
+  .chat-messages{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;}
+  .msg{max-width:80%;padding:10px 16px;border-radius:16px;font-size:14px;line-height:1.7;white-space:pre-wrap;}
+  .msg.user{align-self:flex-start;background:var(--panelLight);color:var(--cream);}
+  .msg.bot{align-self:flex-end;background:var(--goldDim);color:var(--bg);}
+  .typing{align-self:flex-end;font-size:12px;color:var(--creamDim);}
+  .chat-quick{display:flex;gap:8px;flex-wrap:wrap;padding:8px 20px;border-top:1px solid var(--border);}
+  .chip{font-size:12px;padding:6px 12px;border-radius:999px;background:var(--panelLight);color:var(--teal);border:1px solid var(--border);cursor:pointer;}
+  .chat-input-row{display:flex;gap:8px;padding:14px 20px;align-items:flex-end;}
+  textarea#chatInput{flex:1;resize:none;border-radius:12px;padding:12px 16px;background:var(--panelLight);color:var(--cream);
+    border:1px solid var(--border);font-family:'Tajawal',sans-serif;font-size:14px;}
+  .icon-btn{padding:12px;border-radius:12px;background:var(--panelLight);color:var(--creamDim);border:none;cursor:pointer;flex-shrink:0;}
+  .send-btn{padding:12px;border-radius:12px;background:var(--gold);color:var(--bg);border:none;cursor:pointer;flex-shrink:0;}
+  .exam-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+  @media (min-width:768px){.exam-grid{grid-template-columns:1fr 1fr;}}
+  .badge{font-size:11px;padding:4px 10px;border-radius:999px;background:var(--panelLight);}
+  .exam-btn{margin-top:10px;padding:10px;border-radius:12px;background:var(--panelLight);color:var(--gold);border:1px solid var(--goldDim);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:14px;width:100%;}
+  .options-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px;}
+  @media (min-width:640px){.options-grid{grid-template-columns:1fr 1fr;}}
+  .option-btn{padding:10px 16px;border-radius:12px;text-align:right;background:var(--panelLight);color:var(--cream);
+    border:1px solid var(--border);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:14px;}
+  .option-btn.selected{background:var(--gold);color:var(--bg);border-color:var(--gold);}
+  .book-grid{display:grid;grid-template-columns:1fr;gap:24px;}
+  @media (min-width:1024px){.book-grid{grid-template-columns:2fr 1fr;}}
+  .note-item{font-size:12px;background:var(--panelLight);color:var(--creamDim);border-radius:10px;padding:8px 10px;margin-bottom:6px;}
+  .note-input-row{display:flex;gap:6px;margin-top:10px;}
+  .note-input-row input{flex:1;background:var(--panelLight);border:1px solid var(--border);border-radius:10px;color:var(--cream);font-size:12px;padding:8px 10px;}
+  .note-input-row button{font-size:12px;padding:8px 14px;border-radius:10px;background:var(--gold);color:var(--bg);border:none;cursor:pointer;}
+  .profile-grid{display:grid;grid-template-columns:1fr;gap:24px;}
+  @media (min-width:1024px){.profile-grid{grid-template-columns:1fr 2fr;}}
+  .kv{display:flex;justify-content:space-between;font-size:12px;margin-top:8px;}
+  .btn-gold{background:var(--gold);color:var(--bg);border:none;padding:10px 20px;border-radius:12px;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;}
+  .schedule-item{display:flex;align-items:center;gap:14px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--border);}
+  .schedule-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dot{width:8px;height:8px;border-radius:999px;background:var(--teal);flex-shrink:0;}
+  .time-tag{font-size:12px;color:var(--goldDim);width:110px;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="qamariya" data-size="40"></span>
+      <div class="brand-text">
+        <div class="title">AI Topper</div>
+        <div class="sub">Smart</div>
+      </div>
+    </div>
+    <nav>
+      <button class="active" data-target="dashboard"><span class="icon">📊</span><span class="label">لوحة التحكم</span></button>
+      <button data-target="teacher"><span class="icon">🤖</span><span class="label">المعلم الذكي</span></button>
+      <button data-target="book"><span class="icon">📖</span><span class="label">الكراسة الرقمية</span></button>
+      <button data-target="exams"><span class="icon">📝</span><span class="label">الاختبارات</span></button>
+      <button data-target="time"><span class="icon">⏰</span><span class="label">إدارة الوقت</span></button>
+      <button data-target="parent"><span class="icon">👨‍👩‍👦</span><span class="label">بوابة ولي الأمر</span></button>
+      <button data-target="profile"><span class="icon">👤</span><span class="label">الملف الشخصي</span></button>
+    </nav>
+    <div class="user-row">
+      <div class="avatar">أ</div>
+      <div class="user-text" style="font-size:12px;">
+        <div style="color:var(--cream);">أحمد سالم</div>
+        <div>الصف الثالث الثانوي</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <section id="dashboard" class="section active">
+      <div class="hero">
+        <div>
+          <div style="color:var(--goldDim);font-size:13px;margin-bottom:6px;">مساء الخير، أحمد 👋</div>
+          <h1>أنت على بعد 3% من الوصول لهدفك في الفيزياء</h1>
+          <p style="color:var(--creamDim);font-size:14px;max-width:420px;">استمر في وتيرتك، سلسلة دراستك المتواصلة تقربك من قائمة أوائل الجمهورية.</p>
+        </div>
+        <span class="qamariya" data-size="130"></span>
+      </div>
+      <div class="stats">
+        <div class="card">
+          <div class="stat-label"><span>سلسلة الدراسة</span><span>🔥</span></div>
+          <div class="stat-value">12 يوم</div>
+          <div class="stat-sub" style="color:var(--brick);">استمر!</div>
+        </div>
+        <div class="card">
+          <div class="stat-label"><span>المعدل المتوقع</span><span>📈</span></div>
+          <div class="stat-value">87%</div>
+          <div class="stat-sub" style="color:var(--teal);">+3% هذا الأسبوع</div>
+        </div>
+        <div class="card">
+          <div class="stat-label"><span>الترتيب العام</span><span>🏆</span></div>
+          <div class="stat-value">#15</div>
+          <div class="stat-sub" style="color:var(--gold);">من 500 طالب</div>
+        </div>
+        <div class="card">
+          <div class="stat-label"><span>ساعات الدراسة</span><span>📚</span></div>
+          <div class="stat-value">4.6 س</div>
+          <div class="stat-sub" style="color:var(--cream);">اليوم</div>
+        </div>
+      </div>
+      <div class="card">
+        <h2 style="font-family:'Cairo',sans-serif;margin-top:0;">الدرجة الحالية مقابل المتوقعة</h2>
+        <canvas id="gradesChart" height="110"></canvas>
+      </div>
+    </section>
+
+    <section id="teacher" class="section">
+      <div class="chat-window">
+        <div class="chat-header">
+          <span class="qamariya" data-size="36"></span>
+          <div>
+            <div style="font-family:'Cairo',sans-serif;font-weight:700;">المعلم الذكي</div>
+            <div class="status">متصل الآن</div>
+          </div>
+          <div class="key-row">
+            <input id="apiKeyInput" type="password" placeholder="مفتاح Anthropic API (اختياري)" />
+            <button id="saveKeyBtn">حفظ</button>
+          </div>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-quick">
+          <button class="chip" data-fill="اشرح: ">اشرح</button>
+          <button class="chip" data-fill="لخص: ">لخص</button>
+          <button class="chip" data-fill="ترجم: ">ترجم</button>
+          <button class="chip" data-fill="أعطني مثال: ">أعطني مثال</button>
+        </div>
+        <div class="chat-input-row">
+          <button class="icon-btn">🎤</button>
+          <textarea id="chatInput" rows="1" placeholder="اكتب سؤالك هنا..."></textarea>
+          <button class="send-btn" id="sendBtn">➤</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="book" class="section">
+      <h1 class="page-title">الكراسة الرقمية — الرياضيات</h1>
+      <div class="book-grid">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span id="bookPageIndicator" style="font-size:12px;color:var(--goldDim);"></span>
+            <div style="display:flex;gap:8px;">
+              <button class="icon-btn" id="prevPageBtn">→</button>
+              <button class="icon-btn" id="nextPageBtn">←</button>
+            </div>
+          </div>
+          <h2 id="bookTitle" style="font-family:'Cairo',sans-serif;"></h2>
+          <p id="bookContent" style="line-height:2;color:var(--creamDim);font-size:14px;"></p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="chip" id="summarizeBtn">✨ لخّص الصفحة</button>
+            <button class="btn-gold" id="explainBtn" style="font-size:12px;padding:8px 16px;">✨ اشرح بالذكاء</button>
+          </div>
+          <div id="aiPanel" class="card" style="display:none;background:var(--panelLight);margin-top:6px;font-size:14px;white-space:pre-wrap;"></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+            <span>🗒️</span><h3 style="font-family:'Cairo',sans-serif;margin:0;">ملاحظاتي</h3>
+          </div>
+          <div id="notesList" style="max-height:220px;overflow-y:auto;"></div>
+          <div class="note-input-row">
+            <input id="noteInput" placeholder="أضف ملاحظة..." />
+            <button id="addNoteBtn">إضافة</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="exams" class="section">
+      <div id="examListView">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <h1 class="page-title">مركز الاختبارات</h1>
+          <button class="btn-gold">+ اختبار ذكي جديد</button>
+        </div>
+        <div class="exam-grid" id="examGrid" style="margin-top:20px;"></div>
+      </div>
+      <div id="examQuizView" style="display:none;flex-direction:column;gap:16px;"></div>
+    </section>
+
+    <section id="time" class="section">
+      <h1 class="page-title">جدولك اليوم</h1>
+      <div class="card" id="scheduleCard"></div>
+      <div class="card" style="background:var(--panelLight);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div style="font-size:13px;color:var(--creamDim);">الوقت الضائع اليوم</div>
+          <div style="font-family:'Cairo',sans-serif;font-size:24px;font-weight:800;">42 دقيقة</div>
+        </div>
+        <div style="font-size:12px;color:var(--teal);max-width:280px;">💡 جرّب تقليل وقت التنقل بين المواد لتوفير وقت إضافي للمراجعة</div>
+      </div>
+    </section>
+
+    <section id="parent" class="section">
+      <h1 class="page-title">بوابة ولي الأمر</h1>
+      <div class="card">
+        <h2 style="font-family:'Cairo',sans-serif;margin-top:0;">تقرير هذا الأسبوع</h2>
+        <p style="font-size:14px;line-height:1.9;color:var(--creamDim);">
+          أحمد يحافظ على سلسلة دراسة 12 يوماً متتالياً، وتحسّن أداؤه في مادة الفيزياء بنسبة 4%. لوحظ تراجع بسيط في التركيز خلال
+          مذاكرة الكيمياء مساء الأربعاء — ننصح بتقسيم جلسات المذاكرة إلى فترات أقصر مع فواصل راحة.
+        </p>
+      </div>
+      <div class="card" style="border-color:var(--brick);display:flex;align-items:center;gap:14px;">
+        <span style="font-size:22px;">✅</span>
+        <div style="font-size:14px;">لا توجد تنبيهات مبكرة حالياً — أداء أحمد مستقر ومتصاعد.</div>
+      </div>
+    </section>
+
+    <section id="profile" class="section">
+      <h1 class="page-title">الملف الشخصي</h1>
+      <div class="profile-grid">
+        <div class="card" style="text-align:center;">
+          <div class="avatar" style="width:90px;height:90px;font-size:30px;margin:0 auto 14px;">أ</div>
+          <div style="font-family:'Cairo',sans-serif;font-weight:700;font-size:18px;">أحمد سالم</div>
+          <div style="font-size:12px;color:var(--creamDim);">الصف الثالث الثانوي — علمي</div>
+          <div class="kv"><span style="color:var(--creamDim);">تاريخ الانضمام</span><span>1 سبتمبر 2025</span></div>
+          <div class="kv"><span style="color:var(--creamDim);">الترتيب العام</span><span style="color:var(--gold);">#15 من 500</span></div>
+          <div class="kv"><span style="color:var(--creamDim);">سلسلة الدراسة</span><span style="color:var(--brick);">12 يوم 🔥</span></div>
+        </div>
+        <div class="card">
+          <h2 style="font-family:'Cairo',sans-serif;margin-top:0;">درجاتي في جميع المواد</h2>
+          <canvas id="pieChart" height="220"></canvas>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const subjects = [
+  { name: "الرياضيات", current: 82, expected: 87 },
+  { name: "الفيزياء", current: 78, expected: 82 },
+  { name: "الكيمياء", current: 75, expected: 80 },
+  { name: "الأحياء", current: 88, expected: 91 },
+  { name: "العربية", current: 85, expected: 88 },
+  { name: "الإنجليزية", current: 80, expected: 84 },
+];
+const pieColors = ["#2F8F84", "#A64B3A", "#D4A44C", "#F0E6D2", "#8C6D33", "#5C7A6E"];
+
+const examsData = [
+  { name: "اختبار وزاري - الرياضيات 2024", type: "وزاري", difficulty: "متوسط", time: "90 دقيقة" },
+  { name: "اختبار تجريبي - الفيزياء", type: "تجريبي", difficulty: "صعب", time: "60 دقيقة" },
+  { name: "اختبار ذكي - مراجعة شاملة الكيمياء", type: "ذكي", difficulty: "متكيف", time: "45 دقيقة" },
+  { name: "اختبار وزاري - الأحياء 2023", type: "وزاري", difficulty: "سهل", time: "75 دقيقة" },
+];
+const typeColor = { "وزاري": "#A64B3A", "تجريبي": "#2F8F84", "ذكي": "#D4A44C" };
+
+const questionBank = {
+  "اختبار وزاري - الرياضيات 2024": [
+    { q: "ما ناتج حل المعادلة: 2x + 6 = 14 ؟", options: ["2", "4", "6", "8"], correct: 1 },
+    { q: "أوجد ميل الخط المستقيم المار بالنقطتين (1,2) و (3,6).", options: ["1", "2", "3", "4"], correct: 1 },
+    { q: "ما ناتج اشتقاق الدالة f(x) = x² ؟", options: ["2x", "x", "2", "x²"], correct: 0 },
+  ],
+  "اختبار تجريبي - الفيزياء": [
+    { q: "وحدة قياس القوة في النظام الدولي هي؟", options: ["نيوتن", "جول", "واط", "باسكال"], correct: 0 },
+    { q: "قانون نيوتن الثاني يُعبَّر عنه بالصيغة؟", options: ["F = ma", "F = mv", "E = mc²", "P = IV"], correct: 0 },
+    { q: "ما نوع الحركة عند تسارع ثابت؟", options: ["منتظمة", "متسارعة بانتظام", "دائرية", "عشوائية"], correct: 1 },
+  ],
+  "اختبار ذكي - مراجعة شاملة الكيمياء": [
+    { q: "الرمز الكيميائي للصوديوم هو؟", options: ["Na", "S", "So", "N"], correct: 0 },
+    { q: "عدد أكسدة الأكسجين في أغلب مركباته هو؟", options: ["+1", "-2", "+2", "-1"], correct: 1 },
+    { q: "أي العناصر التالية غاز نبيل؟", options: ["الهيليوم", "الأكسجين", "النيتروجين", "الهيدروجين"], correct: 0 },
+  ],
+  "اختبار وزاري - الأحياء 2023": [
+    { q: "الوحدة البنائية للكائن الحي هي؟", options: ["الخلية", "النسيج", "العضو", "الجهاز"], correct: 0 },
+    { q: "عملية البناء الضوئي تحدث داخل؟", options: ["الميتوكندريا", "البلاستيدات الخضراء", "النواة", "الرايبوسوم"], correct: 1 },
+    { q: "الحمض النووي DNA يوجد بشكل رئيسي في؟", options: ["السيتوبلازم", "النواة", "الغشاء الخلوي", "الجدار الخلوي"], correct: 1 },
+  ],
+};
+
+const bookPages = [
+  { title: "تعريف الدالة", content: "الدالة هي علاقة رياضية تربط كل عنصر من مجموعة المدخلات (المجال) بعنصر واحد فقط من مجموعة المخرجات (المدى). بمعنى آخر، لكل قيمة x يوجد قيمة واحدة فقط لـ y. نرمز للدالة عادة بالشكل f(x)، وتُستخدم الدوال لوصف العلاقات بين المتغيرات في الرياضيات والفيزياء والحياة اليومية." },
+  { title: "أنواع الدوال", content: "تتعدد أنواع الدوال الرياضية، ومن أهمها: الدالة الخطية التي يمثلها خط مستقيم مثل f(x) = 2x + 1، والدالة التربيعية التي يمثلها منحنى القطع المكافئ مثل f(x) = x²، بالإضافة إلى الدالة الأسية والدالة اللوغاريتمية. لكل نوع خصائصه في الرسم البياني والمجال والمدى." },
+  { title: "أمثلة على الدوال", content: "مثال: إذا كانت f(x) = 3x - 2، فإن f(4) = 3(4) - 2 = 10. تساعدنا الدوال على التنبؤ بالنتائج بمعرفة المدخلات، وهذا مفيد عملياً في حساب المسافة والزمن والتكلفة، مثل حساب المسافة التي تقطعها سيارة بسرعة ثابتة خلال زمن معين." },
+];
+
+const schedule = [
+  { time: "4:00 - 5:00 م", task: "مراجعة الرياضيات - المعادلات" },
+  { time: "5:15 - 6:00 م", task: "حل أسئلة الفيزياء" },
+  { time: "6:30 - 7:15 م", task: "قراءة كراسة الأحياء" },
+  { time: "8:00 - 8:30 م", task: "استراحة نشطة" },
+  { time: "8:30 - 9:15 م", task: "اختبار ذكي - الكيمياء" },
+];
+
+function polar(cx, cy, r, deg) {
+  const rad = (deg * Math.PI) / 180;
+  return { x: cx + r * Math.cos(rad), y: cy - r * Math.sin(rad) };
+}
+function qamariyaSVG(size) {
+  const cx = 100, cy = 100, r = 90;
+  const palette = ["#2F8F84", "#A64B3A", "#D4A44C", "#F0E6D2", "#2F8F84", "#A64B3A", "#D4A44C", "#F0E6D2"];
+  let wedges = "";
+  for (let i = 0; i < 8; i++) {
+    const a1 = i * 22.5, a2 = (i + 1) * 22.5;
+    const p1 = polar(cx, cy, r, a1), p2 = polar(cx, cy, r, a2);
+    wedges += `<path d="M${cx},${cy} L${p1.x.toFixed(2)},${p1.y.toFixed(2)} A${r},${r} 0 0,0 ${p2.x.toFixed(2)},${p2.y.toFixed(2)} Z" fill="${palette[i]}" opacity="0.88" stroke="#1A140F" stroke-width="1.5"/>`;
+  }
+  return `<svg width="${size}" height="${size / 2 + 20}" viewBox="0 0 200 120">
+    <rect x="0" y="98" width="200" height="4" fill="#8C6D33"/>
+    ${wedges}
+    <circle cx="100" cy="100" r="14" fill="#1A140F" stroke="#D4A44C" stroke-width="2"/>
+    <circle cx="100" cy="100" r="6" fill="#D4A44C"/>
+  </svg>`;
+}
+document.querySelectorAll(".qamariya").forEach((el) => {
+  el.innerHTML = qamariyaSVG(parseInt(el.dataset.size, 10));
+});
+
+document.querySelectorAll("nav button").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("nav button").forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".section").forEach((s) => s.classList.remove("active"));
+    document.getElementById(btn.dataset.target).classList.add("active");
+    if (btn.dataset.target === "profile") renderPieChart();
+  });
+});
+
+new Chart(document.getElementById("gradesChart"), {
+  type: "bar",
+  data: {
+    labels: subjects.map((s) => s.name),
+    datasets: [
+      { label: "الحالية", data: subjects.map((s) => s.current), backgroundColor: "#2F8F84", borderRadius: 6 },
+      { label: "المتوقعة", data: subjects.map((s) => s.expected), backgroundColor: "#D4A44C", borderRadius: 6 },
+    ],
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { labels: { color: "#B8AA92" } } },
+    scales: {
+      x: { ticks: { color: "#B8AA92" }, grid: { color: "#3D3024" } },
+      y: { ticks: { color: "#B8AA92" }, grid: { color: "#3D3024" } },
+    },
+  },
+});
+
+let pieChartInstance = null;
+function renderPieChart() {
+  if (pieChartInstance) return;
+  pieChartInstance = new Chart(document.getElementById("pieChart"), {
+    type: "doughnut",
+    data: {
+      labels: subjects.map((s) => s.name),
+      datasets: [{ data: subjects.map((s) => s.current), backgroundColor: pieColors }],
+    },
+    options: { plugins: { legend: { labels: { color: "#B8AA92" } } } },
+  });
+}
+
+const examGrid = document.getElementById("examGrid");
+examGrid.innerHTML = examsData
+  .map(
+    (exam, i) => `
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <span class="badge" style="color:${typeColor[exam.type]};">${exam.type}</span>
+      <span style="font-size:12px;color:var(--creamDim);">${exam.time}</span>
+    </div>
+    <div style="font-family:'Cairo',sans-serif;font-weight:700;margin-top:10px;">${exam.name}</div>
+    <div style="font-size:12px;color:var(--creamDim);margin-top:4px;">مستوى الصعوبة: ${exam.difficulty}</div>
+    <button class="exam-btn" onclick="openExam(${i})">ابدأ الاختبار</button>
+  </div>`
+  )
+  .join("");
+
+let currentExamIndex = null;
+let currentAnswers = {};
+function openExam(i) {
+  currentExamIndex = i;
+  currentAnswers = {};
+  document.getElementById("examListView").style.display = "none";
+  document.getElementById("examQuizView").style.display = "flex";
+  renderExam(false);
+}
+function exitExam() {
+  document.getElementById("examListView").style.display = "block";
+  document.getElementById("examQuizView").style.display = "none";
+  document.getElementById("examQuizView").innerHTML = "";
+}
+function selectAnswer(qi, oi) {
+  currentAnswers[qi] = oi;
+  renderExam(false);
+}
+function submitExam() {
+  renderExam(true);
+}
+function renderExam(submitted) {
+  const exam = examsData[currentExamIndex];
+  const questions = questionBank[exam.name] || [];
+  let html = `<div style="display:flex;justify-content:space-between;align-items:center;">
+    <div>
+      <h1 style="font-family:'Cairo',sans-serif;font-weight:800;font-size:19px;margin:0;">${exam.name}</h1>
+      <div style="font-size:12px;color:var(--creamDim);">${exam.time} · ${questions.length} أسئلة</div>
+    </div>
+    <button class="chip" onclick="exitExam()">خروج</button>
+  </div>`;
+
+  if (!submitted) {
+    questions.forEach((q, qi) => {
+      html += `<div class="card"><div style="font-family:'Cairo',sans-serif;font-weight:700;margin-bottom:6px;font-size:14px;">${qi + 1}. ${q.q}</div><div class="options-grid">`;
+      q.options.forEach((opt, oi) => {
+        const sel = currentAnswers[qi] === oi ? "selected" : "";
+        html += `<button class="option-btn ${sel}" onclick="selectAnswer(${qi},${oi})">${opt}</button>`;
+      });
+      html += `</div></div>`;
+    });
+    html += `<button class="btn-gold" style="align-self:flex-start;" onclick="submitExam()">تسليم الاختبار</button>`;
+  } else {
+    let score = 0;
+    questions.forEach((q, qi) => { if (currentAnswers[qi] === q.correct) score++; });
+    html += `<div class="card" style="text-align:center;border-color:var(--goldDim);">
+      <div style="font-size:12px;color:var(--creamDim);">نتيجتك</div>
+      <div style="font-family:'Cairo',sans-serif;font-size:36px;font-weight:800;color:var(--gold);">${score} / ${questions.length}</div>
+    </div>`;
+    questions.forEach((q, qi) => {
+      const ok = currentAnswers[qi] === q.correct;
+      html += `<div class="card">
+        <div style="font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;">${ok ? "✅" : "❌"} ${q.q}</div>
+        <div style="font-size:12px;color:var(--creamDim);margin-top:4px;">الإجابة الصحيحة: ${q.options[q.correct]}</div>
+      </div>`;
+    });
+    html += `<button class="chip" onclick="exitExam()">العودة لمركز الاختبارات</button>`;
+  }
+  document.getElementById("examQuizView").innerHTML = html;
+}
+
+document.getElementById("scheduleCard").innerHTML = schedule
+  .map((s) => `<div class="schedule-item"><span class="time-tag">${s.time}</span><span class="dot"></span><span style="font-size:14px;">${s.task}</span></div>`)
+  .join("");
+
+let currentPage = 0;
+let notes = [{ page: 0, text: "هذا التعريف مهم جداً" }];
+function renderBook() {
+  const p = bookPages[currentPage];
+  document.getElementById("bookPageIndicator").textContent = `صفحة ${currentPage + 1} من ${bookPages.length}`;
+  document.getElementById("bookTitle").textContent = p.title;
+  document.getElementById("bookContent").textContent = p.content;
+  document.getElementById("prevPageBtn").disabled = currentPage === 0;
+  document.getElementById("nextPageBtn").disabled = currentPage === bookPages.length - 1;
+  document.getElementById("aiPanel").style.display = "none";
+  renderNotes();
+}
+function renderNotes() {
+  const list = notes.filter((n) => n.page === currentPage);
+  document.getElementById("notesList").innerHTML = list.length
+    ? list.map((n) => `<div class="note-item">${n.text}</div>`).join("")
+    : `<div style="font-size:12px;color:var(--creamDim);">لا توجد ملاحظات على هذه الصفحة بعد.</div>`;
+}
+document.getElementById("prevPageBtn").addEventListener("click", () => { if (currentPage > 0) { currentPage--; renderBook(); } });
+document.getElementById("nextPageBtn").addEventListener("click", () => { if (currentPage < bookPages.length - 1) { currentPage++; renderBook(); } });
+document.getElementById("addNoteBtn").addEventListener("click", () => {
+  const input = document.getElementById("noteInput");
+  if (!input.value.trim()) return;
+  notes.push({ page: currentPage, text: input.value.trim() });
+  input.value = "";
+  renderNotes();
+});
+document.getElementById("summarizeBtn").addEventListener("click", () => runBookAI("summary"));
+document.getElementById("explainBtn").addEventListener("click", () => runBookAI("explain"));
+async function runBookAI(mode) {
+  const panel = document.getElementById("aiPanel");
+  panel.style.display = "block";
+  panel.textContent = "جاري التحليل...";
+  const p = bookPages[currentPage];
+  const prompt = mode === "summary"
+    ? `لخّص النقاط الأساسية في هذا المحتوى التعليمي في نقاط قصيرة جداً:\n\n${p.content}`
+    : `اشرح هذا المحتوى التعليمي لطالب صف ثالث ثانوي بأسلوب مبسط جداً مع مثال واقعي:\n\n${p.content}`;
+  panel.textContent = await callClaude("أنت مساعد ذكي داخل عارض كتب لمنصة تعليمية يمنية. ردودك مختصرة وواضحة وبنقاط عند الإمكان.", prompt);
+}
+
+let apiKey = "";
+document.getElementById("saveKeyBtn").addEventListener("click", () => {
+  apiKey = document.getElementById("apiKeyInput").value.trim();
+  document.getElementById("apiKeyInput").value = apiKey ? "•".repeat(10) : "";
+});
+
+let messages = [{ role: "assistant", content: "أهلاً بك! أنا معلمك الذكي 👋 اسألني عن أي درس أو مفهوم صعب، وسأساعدك تفهمه خطوة بخطوة." }];
+function renderChat() {
+  const el = document.getElementById("chatMessages");
+  el.innerHTML = messages.map((m) => `<div class="msg ${m.role === "user" ? "user" : "bot"}">${escapeHtml(m.content)}</div>`).join("");
+  el.scrollTop = el.scrollHeight;
+}
+function escapeHtml(str) {
+  const d = document.createElement("div");
+  d.innerText = str;
+  return d.innerHTML;
+}
+renderChat();
+
+document.querySelectorAll(".chip[data-fill]").forEach((chip) => {
+  chip.addEventListener("click", () => {
+    const input = document.getElementById("chatInput");
+    input.value = (input.value ? input.value + " " : "") + chip.dataset.fill;
+    input.focus();
+  });
+});
+document.getElementById("sendBtn").addEventListener("click", () => sendChat());
+document.getElementById("chatInput").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendChat(); }
+});
+async function sendChat() {
+  const input = document.getElementById("chatInput");
+  const text = input.value.trim();
+  if (!text) return;
+  messages.push({ role: "user", content: text });
+  input.value = "";
+  renderChat();
+  const typing = document.createElement("div");
+  typing.className = "typing";
+  typing.textContent = "المعلم يكتب...";
+  document.getElementById("chatMessages").appendChild(typing);
+  const reply = await callClaude(
+    "أنت 'المعلم الذكي' في منصة AI Topper Smart، معلم افتراضي يساعد طلاب الصف التاسع والثالث الثانوي في اليمن. اشرح المفاهيم بأسلوب مبسط وباستخدام أمثلة واقعية قريبة من حياة الطالب اليمني. اتبع أسلوب الحوار السقراطي قدر الإمكان: بدل إعطاء الإجابة مباشرة، اطرح سؤالاً موجهاً يقود الطالب لاكتشاف الحل بنفسه، إلا إذا طلب الطالب صراحة إجابة مباشرة أو ملخصاً. كن دافئاً ومشجعاً ومختصراً.",
+    text
+  );
+  messages.push({ role: "assistant", content: reply });
+  renderChat();
+}
+
+async function callClaude(system, userText) {
+  if (apiKey) {
+    try {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey,
+          "anthropic-version": "2023-06-01",
+          "anthropic-dangerous-direct-browser-access": "true",
+        },
+        body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, system, messages: [{ role: "user", content: userText }] }),
+      });
+      const data = await res.json();
+      const text = (data.content || []).map((b) => b.text || "").join("\n").trim();
+      if (text) return text;
+    } catch (e) {
+      // fall through to local reply
+    }
+  }
+  return localReply(userText);
+}
+function localReply(question) {
+  const templates = [
+    "سؤال جيد! قبل ما أعطيك الإجابة، جرّب تفكر: وش أول خطوة منطقية تقدر تسويها هنا؟",
+    "خلّنا نحلها خطوة بخطوة. وش المعطيات اللي عندك في السؤال؟",
+    "فكرة حلوة! حاول تربطها بمثال من حياتك اليومية، وقولي وش توصلت له.",
+  ];
+  const pick = templates[Math.floor(Math.random() * templates.length)];
+  return pick + "\n\n(هذا رد تجريبي محلي — لتفعيل الذكاء الاصطناعي الحقيقي أدخل مفتاح Anthropic API الخاص بك من الأعلى، أو اربط الموقع بخادم خلفي).";
+}
+
+renderBook();
+</script>
+</body>
+</html>
