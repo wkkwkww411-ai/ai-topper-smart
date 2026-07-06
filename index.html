@@ -109,6 +109,8 @@
       <button data-target="teacher"><span class="icon">🤖</span><span class="label">المعلم الذكي</span></button>
       <button data-target="book"><span class="icon">📖</span><span class="label">الكراسة الرقمية</span></button>
       <button data-target="exams"><span class="icon">📝</span><span class="label">الاختبارات</span></button>
+      <button data-target="solver"><span class="icon">📷</span><span class="label">حل المسائل بالتصوير</span></button>
+      <button data-target="challenge"><span class="icon">🎮</span><span class="label">وضع التحدي</span></button>
       <button data-target="time"><span class="icon">⏰</span><span class="label">إدارة الوقت</span></button>
       <button data-target="parent"><span class="icon">👨‍👩‍👦</span><span class="label">بوابة ولي الأمر</span></button>
       <button data-target="profile"><span class="icon">👤</span><span class="label">الملف الشخصي</span></button>
@@ -170,8 +172,11 @@
             <div class="status">متصل الآن</div>
           </div>
           <div class="key-row">
-            <input id="apiKeyInput" type="password" placeholder="مفتاح Anthropic API (اختياري)" />
-            <button id="saveKeyBtn">حفظ</button>
+            <select id="personaSelect" style="background:var(--panelLight);border:1px solid var(--border);border-radius:8px;color:var(--cream);font-size:11px;padding:6px 8px;">
+              <option value="friendly">🙂 لطيف ومشجّع</option>
+              <option value="strict">🧐 صارم ومباشر</option>
+              <option value="energetic">🔥 حماسي</option>
+            </select>
           </div>
         </div>
         <div class="chat-messages" id="chatMessages"></div>
@@ -230,6 +235,50 @@
         <div class="exam-grid" id="examGrid" style="margin-top:20px;"></div>
       </div>
       <div id="examQuizView" style="display:none;flex-direction:column;gap:16px;"></div>
+    </section>
+
+    <section id="solver" class="section">
+      <h1 class="page-title">حل المسائل بالتصوير</h1>
+      <div class="card" style="text-align:center;padding:40px 20px;">
+        <div style="font-size:40px;margin-bottom:10px;">📷</div>
+        <p style="color:var(--creamDim);font-size:14px;margin-bottom:16px;">صوّر سؤالك الورقي أو ارفع صورة له، وسيقوم النظام بتحليله وتقديم الحل خطوة بخطوة.</p>
+        <input type="file" id="solverInput" accept="image/*" style="display:none;" />
+        <button class="btn-gold" id="solverBtn">📁 اختر صورة السؤال</button>
+        <div id="solverResult" style="display:none;text-align:right;margin-top:20px;"></div>
+      </div>
+    </section>
+
+    <section id="challenge" class="section">
+      <h1 class="page-title">وضع التحدي 🎮</h1>
+      <div class="stats">
+        <div class="card">
+          <div class="stat-label"><span>نقاطك</span><span>⭐</span></div>
+          <div class="stat-value">1,240</div>
+          <div class="stat-sub" style="color:var(--gold);">+80 اليوم</div>
+        </div>
+        <div class="card">
+          <div class="stat-label"><span>الشارات</span><span>🏅</span></div>
+          <div class="stat-value">6</div>
+          <div class="stat-sub" style="color:var(--teal);">آخرها: "مثابر"</div>
+        </div>
+        <div class="card">
+          <div class="stat-label"><span>ترتيبك بالتحدي</span><span>🥈</span></div>
+          <div class="stat-value">#2</div>
+          <div class="stat-sub" style="color:var(--brick);">من 40 طالب بصفك</div>
+        </div>
+      </div>
+      <div class="card">
+        <h2 style="font-family:'Cairo',sans-serif;margin-top:0;">لوحة الصدارة الأسبوعية</h2>
+        <div id="leaderboard"></div>
+      </div>
+      <div class="card">
+        <h2 style="font-family:'Cairo',sans-serif;margin-top:0;">مهمة اليوم الإجبارية</h2>
+        <p style="font-size:14px;color:var(--creamDim);">أكمل 15 سؤال مراجعة في مادة الكيمياء قبل الساعة 9 مساءً لتحافظ على سلسلتك.</p>
+        <div style="background:var(--panelLight);border-radius:999px;height:10px;overflow:hidden;margin-top:10px;">
+          <div style="background:var(--gold);height:100%;width:60%;"></div>
+        </div>
+        <div style="font-size:12px;color:var(--goldDim);margin-top:6px;">9 من 15 سؤال</div>
+      </div>
     </section>
 
     <section id="time" class="section">
@@ -523,10 +572,9 @@ async function runBookAI(mode) {
   panel.textContent = await callClaude("أنت مساعد ذكي داخل عارض كتب لمنصة تعليمية يمنية. ردودك مختصرة وواضحة وبنقاط عند الإمكان.", prompt);
 }
 
-let apiKey = "";
-document.getElementById("saveKeyBtn").addEventListener("click", () => {
-  apiKey = document.getElementById("apiKeyInput").value.trim();
-  document.getElementById("apiKeyInput").value = apiKey ? "•".repeat(10) : "";
+let persona = "friendly";
+document.getElementById("personaSelect").addEventListener("change", (e) => {
+  persona = e.target.value;
 });
 
 let messages = [{ role: "assistant", content: "أهلاً بك! أنا معلمك الذكي 👋 اسألني عن أي درس أو مفهوم صعب، وسأساعدك تفهمه خطوة بخطوة." }];
@@ -573,25 +621,9 @@ async function sendChat() {
 }
 
 async function callClaude(system, userText) {
-  if (apiKey) {
-    try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey,
-          "anthropic-version": "2023-06-01",
-          "anthropic-dangerous-direct-browser-access": "true",
-        },
-        body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, system, messages: [{ role: "user", content: userText }] }),
-      });
-      const data = await res.json();
-      const text = (data.content || []).map((b) => b.text || "").join("\n").trim();
-      if (text) return text;
-    } catch (e) {
-      // fall through to local reply
-    }
-  }
+  // Wire this function to your own Cloudflare Worker endpoint once deployed, e.g.:
+  // const res = await fetch("https://your-worker.workers.dev", { method: "POST", body: JSON.stringify({ system, message: userText }) });
+  // For now this runs fully client-side with no exposed keys.
   return localReply(userText);
 }
 const subjectHints = {
@@ -637,12 +669,56 @@ const genericReplies = [
   "خطوة أولى مفيدة دائماً: حدد وش تعرفه أكيد من السؤال، ووش لسا مو واضح لك؟",
 ];
 
+const personaWrap = {
+  friendly: (t) => t,
+  strict: (t) => t.replace(/جرّب|حاول/g, "لازم").replace(/؟$/, ". ركّز وجاوبني بدقة."),
+  energetic: (t) => "يلّلا بطل! 💪 " + t + " أنا واثق فيك!",
+};
+
 function localReply(question) {
   const subject = detectSubject(question);
   const pool = subject ? subjectHints[subject].replies : genericReplies;
   const pick = pool[Math.floor(Math.random() * pool.length)];
-  return pick;
+  const wrap = personaWrap[persona] || personaWrap.friendly;
+  return wrap(pick);
 }
+
+const leaderboardData = [
+  { name: "سارة أحمد", points: 1480, you: false },
+  { name: "أحمد سالم (أنت)", points: 1240, you: true },
+  { name: "محمد قاسم", points: 1190, you: false },
+  { name: "فاطمة علي", points: 1050, you: false },
+  { name: "يوسف ناصر", points: 970, you: false },
+];
+document.getElementById("leaderboard").innerHTML = leaderboardData
+  .map(
+    (p, i) => `<div class="schedule-item" style="${p.you ? "background:var(--panelLight);border-radius:10px;padding:10px;margin-bottom:6px;border-bottom:none;" : ""}">
+      <span style="width:28px;font-family:'Cairo',sans-serif;font-weight:800;color:${i === 0 ? "var(--gold)" : "var(--creamDim)"};">#${i + 1}</span>
+      <span style="flex:1;font-size:14px;${p.you ? "color:var(--gold);font-weight:700;" : ""}">${p.name}</span>
+      <span style="font-size:13px;color:var(--creamDim);">${p.points} نقطة</span>
+    </div>`
+  )
+  .join("");
+
+document.getElementById("solverBtn").addEventListener("click", () => document.getElementById("solverInput").click());
+document.getElementById("solverInput").addEventListener("change", async (e) => {
+  if (!e.target.files.length) return;
+  const result = document.getElementById("solverResult");
+  result.style.display = "block";
+  result.innerHTML = `<div class="card">جاري تحليل الصورة واستخراج المسألة...</div>`;
+  await new Promise((r) => setTimeout(r, 1200));
+  result.innerHTML = `
+    <div class="card">
+      <div style="font-family:'Cairo',sans-serif;font-weight:700;margin-bottom:8px;">📝 المسألة المستخرجة (تجريبي)</div>
+      <div style="font-size:14px;color:var(--creamDim);margin-bottom:14px;">أوجد قيمة x في المعادلة: 3x - 5 = 16</div>
+      <div style="font-family:'Cairo',sans-serif;font-weight:700;margin-bottom:6px;">✅ الحل خطوة بخطوة</div>
+      <div style="font-size:14px;line-height:2;color:var(--creamDim);">
+        1) أضف 5 لطرفي المعادلة: 3x = 21<br/>
+        2) اقسم الطرفين على 3: x = 7
+      </div>
+      <div style="font-size:11px;color:var(--goldDim);margin-top:12px;">* هذا عرض تجريبي لآلية العمل — الربط بمحرك OCR/رؤية حقيقي يحتاج خادم خلفي.</div>
+    </div>`;
+});
 
 renderBook();
 </script>
