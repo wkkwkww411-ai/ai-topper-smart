@@ -654,8 +654,8 @@ document.getElementById("loadLocalAiBtn").addEventListener("click", () => {
   localAiLoadAttempted = false;
   initLocalAI();
 });
-// يبدأ التحميل تلقائياً بمجرد فتح تبويب "المعلم الذكي" لأول مرة
-document.querySelector('nav button[data-target="teacher"]').addEventListener("click", () => initLocalAI());
+// يبدأ تحميل النموذج تلقائياً فور فتح الصفحة، بدون أي إجراء من الطالب
+initLocalAI();
 
 async function callClaude(system, userText) {
   if (usingLocalAI && localEngine) {
