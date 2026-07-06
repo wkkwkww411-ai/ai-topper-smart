@@ -172,6 +172,7 @@
             <div class="status">متصل الآن</div>
           </div>
           <div class="key-row">
+            <button id="loadLocalAiBtn" class="chip" style="font-size:11px;">🧠 تفعيل AI محلي حقيقي</button>
             <select id="personaSelect" style="background:var(--panelLight);border:1px solid var(--border);border-radius:8px;color:var(--cream);font-size:11px;padding:6px 8px;">
               <option value="friendly">🙂 لطيف ومشجّع</option>
               <option value="strict">🧐 صارم ومباشر</option>
@@ -179,6 +180,7 @@
             </select>
           </div>
         </div>
+        <div id="localAiProgress" style="display:none;font-size:11px;color:var(--goldDim);padding:6px 20px;border-bottom:1px solid var(--border);"></div>
         <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-quick">
           <button class="chip" data-fill="اشرح: ">اشرح</button>
@@ -620,10 +622,46 @@ async function sendChat() {
   renderChat();
 }
 
+let localEngine = null;
+let usingLocalAI = false;
+document.getElementById("loadLocalAiBtn").addEventListener("click", async () => {
+  if (usingLocalAI) return;
+  const btn = document.getElementById("loadLocalAiBtn");
+  const progress = document.getElementById("localAiProgress");
+  btn.disabled = true;
+  btn.textContent = "⏳ يتم التحميل...";
+  progress.style.display = "block";
+  progress.textContent = "جاري تحميل النموذج (أول مرة فقط، يُخزَّن بعدها في المتصفح)...";
+  try {
+    const webllm = await import("https://esm.run/@mlc-ai/web-llm");
+    localEngine = await webllm.CreateMLCEngine("Qwen2.5-1.5B-Instruct-q4f16_1-MLC", {
+      initProgressCallback: (report) => { progress.textContent = report.text; },
+    });
+    usingLocalAI = true;
+    btn.textContent = "✅ الذكاء المحلي مفعّل";
+    progress.textContent = "جاهز! أنت الآن تتحدث مع نموذج ذكاء اصطناعي حقيقي يعمل بالكامل داخل متصفحك.";
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = "🧠 تفعيل AI محلي حقيقي";
+    progress.textContent = "تعذّر التحميل — يتطلب متصفح Chrome أو Edge حديث يدعم WebGPU. سيستمر العمل بالمحرك المحلي الخفيف.";
+  }
+});
+
 async function callClaude(system, userText) {
-  // Wire this function to your own Cloudflare Worker endpoint once deployed, e.g.:
-  // const res = await fetch("https://your-worker.workers.dev", { method: "POST", body: JSON.stringify({ system, message: userText }) });
-  // For now this runs fully client-side with no exposed keys.
+  if (usingLocalAI && localEngine) {
+    try {
+      const res = await localEngine.chat.completions.create({
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: userText },
+        ],
+      });
+      const text = res.choices?.[0]?.message?.content?.trim();
+      if (text) return text;
+    } catch (e) {
+      // fall through to the lightweight local reply engine
+    }
+  }
   return localReply(userText);
 }
 const subjectHints = {
