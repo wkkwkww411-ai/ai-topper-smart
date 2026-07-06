@@ -626,6 +626,13 @@ let localEngine = null;
 let usingLocalAI = false;
 let localAiLoadAttempted = false;
 
+// نحاول تحميل نموذج DeepSeek الاستدلالي أولاً، وإن لم يتوفر اسمه بمكتبة WebLLM نرجع تلقائياً لبديل مضمون
+const MODEL_CANDIDATES = [
+  "DeepSeek-R1-Distill-Qwen-1.5B-q4f16_1-MLC",
+  "DeepSeek-R1-Distill-Qwen-7B-q4f16_1-MLC",
+  "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
+];
+
 async function initLocalAI() {
   if (usingLocalAI || localAiLoadAttempted) return;
   localAiLoadAttempted = true;
@@ -634,20 +641,30 @@ async function initLocalAI() {
   btn.disabled = true;
   btn.textContent = "⏳ يتم التحميل تلقائياً...";
   progress.style.display = "block";
-  progress.textContent = "جاري تحميل النموذج تلقائياً (أول مرة فقط، يُخزَّن بعدها في المتصفح)...";
+  progress.textContent = "جاري تحميل نموذج DeepSeek تلقائياً (أول مرة فقط، يُخزَّن بعدها في المتصفح)...";
   try {
     const webllm = await import("https://esm.run/@mlc-ai/web-llm");
-    localEngine = await webllm.CreateMLCEngine("Qwen2.5-1.5B-Instruct-q4f16_1-MLC", {
-      initProgressCallback: (report) => { progress.textContent = report.text; },
-    });
-    usingLocalAI = true;
-    btn.textContent = "✅ الذكاء المحلي مفعّل";
-    progress.textContent = "جاهز! أنت الآن تتحدث مع نموذج ذكاء اصطناعي حقيقي يعمل بالكامل داخل متصفحك.";
+    let lastError = null;
+    for (const modelId of MODEL_CANDIDATES) {
+      try {
+        progress.textContent = `جاري تحميل ${modelId} ...`;
+        localEngine = await webllm.CreateMLCEngine(modelId, {
+          initProgressCallback: (report) => { progress.textContent = report.text; },
+        });
+        usingLocalAI = true;
+        btn.textContent = "✅ نموذج DeepSeek مفعّل";
+        progress.textContent = `جاهز! أنت الآن تتحدث مع نموذج ${modelId} الحقيقي يعمل بالكامل داخل متصفحك.`;
+        return;
+      } catch (innerErr) {
+        lastError = innerErr;
+      }
+    }
+    throw lastError || new Error("no model available");
   } catch (e) {
     localAiLoadAttempted = false;
     btn.disabled = false;
     btn.textContent = "🧠 إعادة محاولة التحميل";
-    progress.textContent = "تعذّر التحميل التلقائي — يتطلب متصفح Chrome أو Edge حديث يدعم WebGPU. اضغط الزر لإعادة المحاولة، وإلا سيُستخدم المحرك المحلي الخفيف.";
+    progress.textContent = "تعذّر التحميل — يتطلب متصفح Chrome أو Edge حديث يدعم WebGPU. اضغط الزر لإعادة المحاولة، وإلا سيُستخدم المحرك المحلي الخفيف.";
   }
 }
 document.getElementById("loadLocalAiBtn").addEventListener("click", () => {
