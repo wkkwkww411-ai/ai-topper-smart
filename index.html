@@ -17,6 +17,17 @@
   body{margin:0;background:var(--bg);color:var(--cream);font-family:'Tajawal',sans-serif;}
   ::-webkit-scrollbar{width:8px;}
   ::-webkit-scrollbar-thumb{background:var(--goldDim);border-radius:4px;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes glow{0%,100%{filter:drop-shadow(0 0 2px var(--gold));}50%{filter:drop-shadow(0 0 14px var(--gold));}}
+  .section.active{animation:fadeUp .35s ease both;}
+  .card{transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;}
+  .card:hover{transform:translateY(-3px);border-color:var(--goldDim);box-shadow:0 10px 30px -12px rgba(0,0,0,.6);}
+  nav button{transition:all .15s ease;}
+  nav button:hover{color:var(--cream);background:var(--panelLight);}
+  .btn-gold, .exam-btn, .option-btn, .chip, .send-btn, .icon-btn{transition:transform .12s ease, filter .12s ease;}
+  .btn-gold:hover, .exam-btn:hover, .send-btn:hover{transform:translateY(-2px);filter:brightness(1.08);}
+  .option-btn:hover{border-color:var(--gold);}
+  .qamariya-glow svg{animation:glow 4s ease-in-out infinite;}
   .app{display:flex;min-height:100vh;}
   .sidebar{width:240px;background:var(--panel);border-left:1px solid var(--border);padding:20px;display:flex;flex-direction:column;flex-shrink:0;}
   @media (max-width:768px){
@@ -91,6 +102,11 @@
   .schedule-item{display:flex;align-items:center;gap:14px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--border);}
   .schedule-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
   .dot{width:8px;height:8px;border-radius:999px;background:var(--teal);flex-shrink:0;}
+  .badges-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (min-width:768px){.badges-grid{grid-template-columns:repeat(3,1fr);}}
+  .roadmap-step{display:flex;gap:16px;padding-bottom:26px;position:relative;}
+  .roadmap-step:not(:last-child)::before{content:"";position:absolute;right:15px;top:32px;bottom:0;width:2px;background:var(--border);}
+  .roadmap-dot{width:32px;height:32px;border-radius:999px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;z-index:1;}
   .time-tag{font-size:12px;color:var(--goldDim);width:110px;flex-shrink:0;}
 </style>
 </head>
@@ -114,6 +130,8 @@
       <button data-target="time"><span class="icon">⏰</span><span class="label">إدارة الوقت</span></button>
       <button data-target="parent"><span class="icon">👨‍👩‍👦</span><span class="label">بوابة ولي الأمر</span></button>
       <button data-target="profile"><span class="icon">👤</span><span class="label">الملف الشخصي</span></button>
+      <button data-target="roadmap"><span class="icon">🗺️</span><span class="label">خريطة النجاح</span></button>
+      <button data-target="achievements"><span class="icon">🏅</span><span class="label">الإنجازات</span></button>
     </nav>
     <div class="user-row">
       <div class="avatar">أ</div>
@@ -133,7 +151,7 @@
           <h1>أنت على بعد 3% من الوصول لهدفك في الفيزياء</h1>
           <p style="color:var(--creamDim);font-size:14px;max-width:420px;">استمر في وتيرتك، سلسلة دراستك المتواصلة تقربك من قائمة أوائل الجمهورية.</p>
         </div>
-        <span class="qamariya" data-size="130"></span>
+        <span class="qamariya qamariya-glow" data-size="130"></span>
       </div>
       <div class="stats">
         <div class="card">
@@ -326,6 +344,19 @@
           <canvas id="pieChart" height="220"></canvas>
         </div>
       </div>
+    </section>
+
+    <section id="roadmap" class="section">
+      <h1 class="page-title">خريطة النجاح 🗺️</h1>
+      <div class="card">
+        <p style="font-size:14px;color:var(--creamDim);margin-bottom:24px;">مسارك نحو قائمة أوائل الجمهورية — كل نقطة إنجاز فعلي بنيت عليه.</p>
+        <div id="roadmapTrack" style="display:flex;flex-direction:column;gap:0;"></div>
+      </div>
+    </section>
+
+    <section id="achievements" class="section">
+      <h1 class="page-title">الإنجازات 🏅</h1>
+      <div class="badges-grid" id="badgesGrid"></div>
     </section>
 
   </main>
@@ -784,6 +815,47 @@ document.getElementById("solverInput").addEventListener("change", async (e) => {
       <div style="font-size:11px;color:var(--goldDim);margin-top:12px;">* هذا عرض تجريبي لآلية العمل — الربط بمحرك OCR/رؤية حقيقي يحتاج خادم خلفي.</div>
     </div>`;
 });
+
+const roadmapSteps = [
+  { icon: "🏁", title: "بداية الرحلة", desc: "انضممت للمنصة وحددت هدفك: الوصول لقائمة أوائل الجمهورية.", done: true },
+  { icon: "🔥", title: "أول سلسلة دراسة 7 أيام", desc: "حافظت على المذاكرة اليومية أسبوعاً كاملاً بدون انقطاع.", done: true },
+  { icon: "📈", title: "تحسّن في 3 مواد", desc: "ارتفعت درجاتك في الرياضيات والفيزياء والكيمياء بشكل ملحوظ.", done: true },
+  { icon: "🏆", title: "دخول أفضل 20 بصفك", desc: "وصلت للمركز #15 من 500 طالب — أنت الآن ضمن الأوائل.", done: true },
+  { icon: "🎯", title: "معدل متوقع 90%+", desc: "الهدف القادم: رفع معدلك العام فوق 90% قبل الاختبارات الوزارية.", done: false },
+  { icon: "🥇", title: "قائمة أوائل الجمهورية", desc: "الهدف النهائي — استمر ولا توقف!", done: false },
+];
+document.getElementById("roadmapTrack").innerHTML = roadmapSteps
+  .map(
+    (s) => `<div class="roadmap-step">
+      <div class="roadmap-dot" style="background:${s.done ? "var(--gold)" : "var(--panelLight)"};color:${s.done ? "var(--bg)" : "var(--creamDim)"};border:${s.done ? "none" : "1px solid var(--border)"};">${s.icon}</div>
+      <div>
+        <div style="font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;color:${s.done ? "var(--cream)" : "var(--creamDim)"};">${s.title}</div>
+        <div style="font-size:12px;color:var(--creamDim);margin-top:2px;max-width:480px;">${s.desc}</div>
+      </div>
+    </div>`
+  )
+  .join("");
+
+const badgesData = [
+  { icon: "🔥", name: "مثابر", desc: "12 يوم دراسة متواصلة", earned: true },
+  { icon: "🧮", name: "بطل الرياضيات", desc: "أكملت 5 اختبارات رياضيات بنجاح", earned: true },
+  { icon: "⚡", name: "سريع البديهة", desc: "أنهيت اختباراً في نصف الوقت المحدد", earned: true },
+  { icon: "📚", name: "قارئ نهم", desc: "أكملت 10 صفحات من الكراسة الرقمية", earned: true },
+  { icon: "🥇", name: "من الأوائل", desc: "دخلت أفضل 20 طالباً بصفك", earned: true },
+  { icon: "🌙", name: "ساهر الليل", desc: "ذاكرت بعد الساعة 11 مساءً 5 مرات", earned: true },
+  { icon: "🧪", name: "عالم كيمياء", desc: "علامة كاملة في اختبار كيمياء", earned: false },
+  { icon: "🏆", name: "أول الجمهورية", desc: "الوصول لقائمة أوائل الجمهورية", earned: false },
+];
+document.getElementById("badgesGrid").innerHTML = badgesData
+  .map(
+    (b) => `<div class="card" style="text-align:center;opacity:${b.earned ? 1 : 0.4};">
+      <div style="font-size:32px;margin-bottom:8px;">${b.icon}</div>
+      <div style="font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;">${b.name}</div>
+      <div style="font-size:11px;color:var(--creamDim);margin-top:4px;">${b.desc}</div>
+      ${b.earned ? `<div style="font-size:10px;color:var(--teal);margin-top:8px;">✓ مكتسبة</div>` : `<div style="font-size:10px;color:var(--goldDim);margin-top:8px;">🔒 لم تُكتسب بعد</div>`}
+    </div>`
+  )
+  .join("");
 
 renderBook();
 </script>
