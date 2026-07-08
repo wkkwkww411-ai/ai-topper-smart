@@ -128,6 +128,8 @@
       <button data-target="solver"><span class="icon">📷</span><span class="label">حل المسائل بالتصوير</span></button>
       <button data-target="challenge"><span class="icon">🎮</span><span class="label">وضع التحدي</span></button>
       <button data-target="time"><span class="icon">⏰</span><span class="label">إدارة الوقت</span></button>
+      <button data-target="tutors"><span class="icon">👨‍🏫</span><span class="label">حجز المدرسين</span></button>
+      <button data-target="community"><span class="icon">💬</span><span class="label">مجتمع الطلاب</span></button>
       <button data-target="parent"><span class="icon">👨‍👩‍👦</span><span class="label">بوابة ولي الأمر</span></button>
       <button data-target="profile"><span class="icon">👤</span><span class="label">الملف الشخصي</span></button>
       <button data-target="roadmap"><span class="icon">🗺️</span><span class="label">خريطة النجاح</span></button>
@@ -248,6 +250,13 @@
 
     <section id="exams" class="section">
       <div id="examListView">
+        <div class="card" style="background:linear-gradient(135deg,var(--panel),var(--panelLight));display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+          <div>
+            <div style="font-size:12px;color:var(--creamDim);">العد التنازلي لاختبارك الوزاري القادم</div>
+            <div id="examCountdown" style="font-family:'Cairo',sans-serif;font-size:22px;font-weight:800;color:var(--gold);margin-top:4px;"></div>
+          </div>
+          <div style="font-size:12px;color:var(--teal);max-width:260px;">📌 خطة مراجعة مكثفة متاحة بتاب "إدارة الوقت"</div>
+        </div>
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <h1 class="page-title">مركز الاختبارات</h1>
           <button class="btn-gold">+ اختبار ذكي جديد</button>
@@ -344,6 +353,20 @@
           <canvas id="pieChart" height="220"></canvas>
         </div>
       </div>
+    </section>
+
+    <section id="tutors" class="section">
+      <h1 class="page-title">حجز المدرسين 👨‍🏫</h1>
+      <div class="exam-grid" id="tutorsGrid"></div>
+    </section>
+
+    <section id="community" class="section">
+      <h1 class="page-title">مجتمع الطلاب 💬</h1>
+      <div class="card">
+        <textarea id="communityInput" rows="2" placeholder="اطرح سؤالاً أو شارك ما تعلمته اليوم..." style="width:100%;resize:none;border-radius:12px;padding:12px 16px;background:var(--panelLight);color:var(--cream);border:1px solid var(--border);font-family:'Tajawal',sans-serif;font-size:14px;"></textarea>
+        <button class="btn-gold" id="communityPostBtn" style="margin-top:10px;">نشر</button>
+      </div>
+      <div id="communityFeed" style="display:flex;flex-direction:column;gap:14px;"></div>
     </section>
 
     <section id="roadmap" class="section">
@@ -858,6 +881,76 @@ document.getElementById("badgesGrid").innerHTML = badgesData
   .join("");
 
 renderBook();
+
+// Exam countdown
+const examDate = new Date();
+examDate.setDate(examDate.getDate() + 23);
+function updateCountdown() {
+  const diff = examDate - new Date();
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  document.getElementById("examCountdown").textContent = `${days} يوم و ${hours} ساعة`;
+}
+updateCountdown();
+setInterval(updateCountdown, 60000);
+
+// Tutor booking
+const tutorsData = [
+  { name: "أ. سامي الحداد", subject: "الرياضيات", rating: "4.9", price: "3000 ريال / حصة", slots: ["اليوم 5 م", "غداً 4 م", "غداً 7 م"] },
+  { name: "أ. ريم الشامي", subject: "الفيزياء", rating: "4.8", price: "3500 ريال / حصة", slots: ["اليوم 6 م", "غداً 3 م"] },
+  { name: "أ. خالد مقبل", subject: "الكيمياء", rating: "4.7", price: "2800 ريال / حصة", slots: ["غداً 5 م", "بعد غد 4 م"] },
+  { name: "أ. هدى الصبري", subject: "الأحياء", rating: "5.0", price: "3200 ريال / حصة", slots: ["اليوم 8 م", "غداً 6 م"] },
+];
+document.getElementById("tutorsGrid").innerHTML = tutorsData
+  .map(
+    (t, i) => `<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-family:'Cairo',sans-serif;font-weight:700;">${t.name}</div>
+        <span class="badge" style="color:var(--gold);">⭐ ${t.rating}</span>
+      </div>
+      <div style="font-size:12px;color:var(--teal);margin-top:4px;">${t.subject}</div>
+      <div style="font-size:12px;color:var(--creamDim);margin-top:4px;">${t.price}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+        ${t.slots.map((s, si) => `<button class="chip" onclick="bookTutor(${i},${si})" id="slot-${i}-${si}">${s}</button>`).join("")}
+      </div>
+    </div>`
+  )
+  .join("");
+function bookTutor(ti, si) {
+  const btn = document.getElementById(`slot-${ti}-${si}`);
+  btn.textContent = "✅ تم الحجز";
+  btn.style.background = "var(--gold)";
+  btn.style.color = "var(--bg)";
+  btn.disabled = true;
+}
+
+// Student community
+let communityPosts = [
+  { name: "سارة أحمد", time: "قبل 20 دقيقة", text: "أحد يقدر يشرح لي درس التفاضل بأسلوب مبسط؟ ما فهمته زين بالحصة 😅" },
+  { name: "محمد قاسم", time: "قبل ساعة", text: "أنهيت اليوم مراجعة كاملة لدرس الديناميكا الحرارية 🔥 اللي يبي ملخصي يقول لي." },
+  { name: "فاطمة علي", time: "قبل 3 ساعات", text: "نصيحة: قسّموا وقت المذاكرة لفترات 25 دقيقة مع راحة 5 دقايق، ساعدتني كثير هالأسبوع 💪" },
+];
+function renderCommunity() {
+  document.getElementById("communityFeed").innerHTML = communityPosts
+    .map(
+      (p) => `<div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-family:'Cairo',sans-serif;font-weight:700;font-size:13px;">${p.name}</div>
+          <div style="font-size:11px;color:var(--creamDim);">${p.time}</div>
+        </div>
+        <div style="font-size:14px;color:var(--creamDim);margin-top:6px;">${p.text}</div>
+      </div>`
+    )
+    .join("");
+}
+renderCommunity();
+document.getElementById("communityPostBtn").addEventListener("click", () => {
+  const input = document.getElementById("communityInput");
+  if (!input.value.trim()) return;
+  communityPosts.unshift({ name: "أحمد سالم (أنت)", time: "الآن", text: input.value.trim() });
+  input.value = "";
+  renderCommunity();
+});
 </script>
 </body>
 </html>
