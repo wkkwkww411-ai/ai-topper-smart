@@ -4,145 +4,136 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>AI Topper Smart — منصة تعليمية ذكية لطالب الجمهورية اليمنية</title>
-<meta name="description" content="منصة AI Topper Smart تستخدم الذكاء الاصطناعي لمساعدة طلاب الصف التاسع والثالث الثانوي في اليمن على التفوق: معلم ذكي، كراسة رقمية تفاعلية، اختبارات مبوّبة، إدارة وقت، وحجز مدرسين." />
-<meta name="theme-color" content="#1A140F" />
+<meta name="description" content="منصة AI Topper Smart تستخدم الذكاء الاصطناعي لمساعدة طلاب الصف التاسع والثالث الثانوي في اليمن على التفوق." />
+<meta name="theme-color" content="#16332C" />
 <link rel="icon" type="image/png" href="icon-192.png" />
 <link rel="apple-touch-icon" href="icon-192.png" />
 <link rel="manifest" href="manifest.json" />
-<meta property="og:title" content="AI Topper Smart" />
-<meta property="og:description" content="منصة تعليمية ذكية لطالب الجمهورية اليمنية، مدعومة بالذكاء الاصطناعي." />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="icon-512.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Rakkas&family=Cairo:wght@600;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
   :root{
-    --bg:#1A140F; --panel:#241C15; --panelLight:#2E241A; --border:#3D3024;
-    --gold:#D4A44C; --goldDim:#8C6D33; --teal:#2F8F84; --brick:#A64B3A;
-    --cream:#F0E6D2; --creamDim:#B8AA92;
+    --bg:#16332C; --panel:#1D3F36; --panelLight:#24493E; --border:rgba(244,243,238,.3);
+    --gold:#F2C94C; --goldDim:#C9A227; --teal:#7EC8E3; --brick:#E85D4E;
+    --cream:#F4F3EE; --creamDim:#A9C2B8;
   }
   *{box-sizing:border-box;}
-  body{margin:0;background:var(--bg);color:var(--cream);font-family:'Tajawal',sans-serif;}
+  body{margin:0;background:var(--bg);color:var(--cream);font-family:'Tajawal',sans-serif;background-image:radial-gradient(rgba(244,243,238,.03) 1px, transparent 1px);background-size:22px 22px;}
   ::-webkit-scrollbar{width:8px;}
   ::-webkit-scrollbar-thumb{background:var(--goldDim);border-radius:4px;}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-  @keyframes glow{0%,100%{filter:drop-shadow(0 0 2px var(--gold));}50%{filter:drop-shadow(0 0 14px var(--gold));}}
-  .section.active{animation:fadeUp .35s ease both;}
-  .card{transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;}
-  .card:hover{transform:translateY(-3px);border-color:var(--goldDim);box-shadow:0 10px 30px -12px rgba(0,0,0,.6);}
-  nav button{transition:all .15s ease;}
-  nav button:hover{color:var(--cream);background:var(--panelLight);}
-  .btn-gold, .exam-btn, .option-btn, .chip, .send-btn, .icon-btn{transition:transform .12s ease, filter .12s ease;}
-  .btn-gold:hover, .exam-btn:hover, .send-btn:hover{transform:translateY(-2px);filter:brightness(1.08);}
-  .option-btn:hover{border-color:var(--gold);}
-  .qamariya-glow svg{animation:glow 4s ease-in-out infinite;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  .section.active{animation:fadeUp .3s ease both;}
   .app{display:flex;min-height:100vh;}
-  .sidebar{width:240px;background:var(--panel);border-left:1px solid var(--border);padding:20px;display:flex;flex-direction:column;flex-shrink:0;}
+  .sidebar{width:250px;background:var(--panel);border-left:2px dashed var(--border);padding:20px;display:flex;flex-direction:column;flex-shrink:0;}
   @media (max-width:768px){
-    .sidebar{width:76px;padding:12px;}
+    .sidebar{width:78px;padding:12px;}
     .sidebar .label, .sidebar .brand-text, .sidebar .user-text{display:none;}
   }
-  .brand{display:flex;align-items:center;gap:10px;margin-bottom:32px;justify-content:center;}
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:28px;justify-content:center;}
   @media (min-width:769px){.brand{justify-content:flex-start;}}
-  .brand-text .title{font-family:'Cairo',sans-serif;font-weight:800;font-size:18px;}
-  .brand-text .sub{color:var(--goldDim);font-size:12px;}
-  nav{display:flex;flex-direction:column;gap:4px;}
-  nav button{display:flex;align-items:center;gap:12px;padding:12px 14px;border:none;border-right:3px solid transparent;
-    background:transparent;color:var(--creamDim);font-family:'Tajawal',sans-serif;font-size:14px;border-radius:12px;
-    cursor:pointer;text-align:right;width:100%;justify-content:center;}
+  .brand-mark{width:38px;height:38px;border-radius:999px;border:2px dashed var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold);flex-shrink:0;}
+  .brand-text .title{font-family:'Rakkas',sans-serif;font-size:19px;letter-spacing:.5px;}
+  .brand-text .sub{color:var(--goldDim);font-size:11px;letter-spacing:1px;}
+  nav{display:flex;flex-direction:column;gap:3px;}
+  nav button{display:flex;align-items:center;gap:12px;padding:11px 14px;border:none;border-right:3px solid transparent;
+    background:transparent;color:var(--creamDim);font-family:'Tajawal',sans-serif;font-size:13.5px;border-radius:10px;
+    cursor:pointer;text-align:right;width:100%;justify-content:center;transition:all .15s ease;}
   @media (min-width:769px){nav button{justify-content:flex-start;}}
+  nav button:hover{color:var(--cream);background:var(--panelLight);}
   nav button.active{background:var(--panelLight);color:var(--gold);border-right-color:var(--gold);}
-  nav button .icon{font-size:16px;}
-  .user-row{margin-top:auto;padding-top:20px;display:flex;align-items:center;gap:10px;justify-content:center;color:var(--creamDim);}
+  .nav-ico{width:19px;height:19px;flex-shrink:0;}
+  .user-row{margin-top:auto;padding-top:18px;display:flex;align-items:center;gap:10px;justify-content:center;color:var(--creamDim);border-top:2px dashed var(--border);}
   @media (min-width:769px){.user-row{justify-content:flex-start;}}
-  .avatar{width:34px;height:34px;border-radius:999px;background:var(--goldDim);display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;color:var(--cream);}
+  .avatar{width:34px;height:34px;border-radius:999px;background:var(--goldDim);display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;color:var(--bg);}
   .main{flex:1;padding:20px;overflow-x:hidden;}
-  @media (min-width:769px){.main{padding:40px;}}
-  .section{display:none;flex-direction:column;gap:24px;max-width:1200px;}
+  @media (min-width:769px){.main{padding:36px 44px;}}
+  .section{display:none;flex-direction:column;gap:22px;max-width:1200px;}
   .section.active{display:flex;}
-  .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px;}
-  h1.page-title{font-family:'Cairo',sans-serif;font-weight:800;font-size:24px;margin:0;}
-  .hero{display:flex;justify-content:space-between;align-items:center;gap:20px;border-radius:24px;padding:32px;
-    background:linear-gradient(135deg,var(--panel),var(--panelLight));border:1px solid var(--border);flex-wrap:wrap;}
-  .hero h1{font-family:'Cairo',sans-serif;font-weight:800;font-size:26px;margin:4px 0;}
-  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  .card{background:var(--panel);border:2px dashed var(--border);border-radius:14px;padding:20px;transition:border-color .15s ease;}
+  .card:hover{border-color:var(--goldDim);}
+  h1.page-title{font-family:'Rakkas',sans-serif;font-size:26px;margin:0;font-weight:400;}
+  .mark{background:linear-gradient(180deg, transparent 58%, var(--gold) 58%, var(--gold) 92%, transparent 92%);padding:0 2px;}
+  .hero{border-radius:16px;padding:30px 32px;background:var(--panel);border:2px dashed var(--goldDim);}
+  .hero h1{font-family:'Rakkas',sans-serif;font-weight:400;font-size:27px;line-height:1.5;margin:6px 0 10px;}
+  .eyebrow{font-size:12px;letter-spacing:1px;color:var(--gold);display:flex;align-items:center;gap:8px;}
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
   @media (min-width:1024px){.stats{grid-template-columns:repeat(4,1fr);}}
   .stat-label{font-size:12px;color:var(--creamDim);display:flex;justify-content:space-between;align-items:center;}
-  .stat-value{font-family:'Cairo',sans-serif;font-size:28px;font-weight:800;margin-top:10px;}
-  .stat-sub{font-size:12px;margin-top:6px;}
-  .chat-window{display:flex;flex-direction:column;height:75vh;background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
-  .chat-header{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+  .stat-ico{width:17px;height:17px;}
+  .stat-value{font-family:'Cairo',sans-serif;font-size:27px;font-weight:800;margin-top:10px;}
+  .stat-sub{font-size:11.5px;margin-top:6px;}
+  .chat-window{display:flex;flex-direction:column;height:75vh;background:var(--panel);border:2px dashed var(--border);border-radius:14px;overflow:hidden;}
+  .chat-header{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:2px dashed var(--border);flex-wrap:wrap;}
   .chat-header .status{color:var(--teal);font-size:12px;}
-  .key-row{margin-inline-start:auto;display:flex;gap:6px;align-items:center;}
-  .key-row input{background:var(--panelLight);border:1px solid var(--border);border-radius:8px;color:var(--cream);font-size:11px;padding:6px 8px;width:130px;}
-  .key-row button{font-size:11px;padding:6px 10px;border-radius:8px;background:var(--panelLight);color:var(--gold);border:1px solid var(--goldDim);cursor:pointer;}
+  .key-row{margin-inline-start:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+  .key-row select{background:var(--panelLight);border:1px solid var(--border);border-radius:8px;color:var(--cream);font-size:11px;padding:6px 8px;}
+  .chip{font-size:11.5px;padding:6px 12px;border-radius:999px;background:var(--panelLight);color:var(--teal);border:1px dashed var(--goldDim);cursor:pointer;}
   .chat-messages{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;}
-  .msg{max-width:80%;padding:10px 16px;border-radius:16px;font-size:14px;line-height:1.7;white-space:pre-wrap;}
-  .msg.user{align-self:flex-start;background:var(--panelLight);color:var(--cream);}
-  .msg.bot{align-self:flex-end;background:var(--goldDim);color:var(--bg);}
+  .msg{max-width:80%;padding:10px 16px;border-radius:14px;font-size:14px;line-height:1.7;white-space:pre-wrap;}
+  .msg.user{align-self:flex-start;background:var(--panelLight);color:var(--cream);border:1px solid var(--border);}
+  .msg.bot{align-self:flex-end;background:var(--teal);color:var(--bg);}
   .typing{align-self:flex-end;font-size:12px;color:var(--creamDim);}
-  .chat-quick{display:flex;gap:8px;flex-wrap:wrap;padding:8px 20px;border-top:1px solid var(--border);}
-  .chip{font-size:12px;padding:6px 12px;border-radius:999px;background:var(--panelLight);color:var(--teal);border:1px solid var(--border);cursor:pointer;}
+  .chat-quick{display:flex;gap:8px;flex-wrap:wrap;padding:8px 20px;border-top:2px dashed var(--border);}
   .chat-input-row{display:flex;gap:8px;padding:14px 20px;align-items:flex-end;}
   textarea#chatInput{flex:1;resize:none;border-radius:12px;padding:12px 16px;background:var(--panelLight);color:var(--cream);
     border:1px solid var(--border);font-family:'Tajawal',sans-serif;font-size:14px;}
-  .icon-btn{padding:12px;border-radius:12px;background:var(--panelLight);color:var(--creamDim);border:none;cursor:pointer;flex-shrink:0;}
-  .send-btn{padding:12px;border-radius:12px;background:var(--gold);color:var(--bg);border:none;cursor:pointer;flex-shrink:0;}
+  .icon-btn{padding:11px;border-radius:12px;background:var(--panelLight);color:var(--creamDim);border:none;cursor:pointer;flex-shrink:0;display:flex;}
+  .send-btn{padding:11px;border-radius:12px;background:var(--gold);color:var(--bg);border:none;cursor:pointer;flex-shrink:0;display:flex;}
   .exam-grid{display:grid;grid-template-columns:1fr;gap:16px;}
   @media (min-width:768px){.exam-grid{grid-template-columns:1fr 1fr;}}
-  .badge{font-size:11px;padding:4px 10px;border-radius:999px;background:var(--panelLight);}
-  .exam-btn{margin-top:10px;padding:10px;border-radius:12px;background:var(--panelLight);color:var(--gold);border:1px solid var(--goldDim);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:14px;width:100%;}
+  .badge{font-size:10.5px;padding:4px 10px;border-radius:999px;background:var(--panelLight);border:1px solid var(--border);}
+  .exam-btn{margin-top:10px;padding:10px;border-radius:10px;background:var(--panelLight);color:var(--gold);border:1px dashed var(--goldDim);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13.5px;width:100%;}
   .options-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px;}
   @media (min-width:640px){.options-grid{grid-template-columns:1fr 1fr;}}
-  .option-btn{padding:10px 16px;border-radius:12px;text-align:right;background:var(--panelLight);color:var(--cream);
-    border:1px solid var(--border);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:14px;}
+  .option-btn{padding:10px 16px;border-radius:10px;text-align:right;background:var(--panelLight);color:var(--cream);
+    border:1px solid var(--border);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13.5px;}
   .option-btn.selected{background:var(--gold);color:var(--bg);border-color:var(--gold);}
-  .book-grid{display:grid;grid-template-columns:1fr;gap:24px;}
+  .book-grid{display:grid;grid-template-columns:1fr;gap:22px;}
   @media (min-width:1024px){.book-grid{grid-template-columns:2fr 1fr;}}
-  .note-item{font-size:12px;background:var(--panelLight);color:var(--creamDim);border-radius:10px;padding:8px 10px;margin-bottom:6px;}
+  .note-item{font-size:12px;background:var(--panelLight);color:var(--creamDim);border-radius:8px;padding:8px 10px;margin-bottom:6px;}
   .note-input-row{display:flex;gap:6px;margin-top:10px;}
-  .note-input-row input{flex:1;background:var(--panelLight);border:1px solid var(--border);border-radius:10px;color:var(--cream);font-size:12px;padding:8px 10px;}
-  .note-input-row button{font-size:12px;padding:8px 14px;border-radius:10px;background:var(--gold);color:var(--bg);border:none;cursor:pointer;}
-  .profile-grid{display:grid;grid-template-columns:1fr;gap:24px;}
+  .note-input-row input{flex:1;background:var(--panelLight);border:1px solid var(--border);border-radius:8px;color:var(--cream);font-size:12px;padding:8px 10px;}
+  .note-input-row button{font-size:12px;padding:8px 14px;border-radius:8px;background:var(--gold);color:var(--bg);border:none;cursor:pointer;}
+  .profile-grid{display:grid;grid-template-columns:1fr;gap:22px;}
   @media (min-width:1024px){.profile-grid{grid-template-columns:1fr 2fr;}}
   .kv{display:flex;justify-content:space-between;font-size:12px;margin-top:8px;}
-  .btn-gold{background:var(--gold);color:var(--bg);border:none;padding:10px 20px;border-radius:12px;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;}
-  .schedule-item{display:flex;align-items:center;gap:14px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--border);}
+  .btn-gold{background:var(--gold);color:var(--bg);border:none;padding:10px 20px;border-radius:10px;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:700;font-size:13.5px;}
+  .schedule-item{display:flex;align-items:center;gap:14px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px dashed var(--border);}
   .schedule-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
-  .dot{width:8px;height:8px;border-radius:999px;background:var(--teal);flex-shrink:0;}
-  .badges-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
-  @media (min-width:768px){.badges-grid{grid-template-columns:repeat(3,1fr);}}
-  .roadmap-step{display:flex;gap:16px;padding-bottom:26px;position:relative;}
-  .roadmap-step:not(:last-child)::before{content:"";position:absolute;right:15px;top:32px;bottom:0;width:2px;background:var(--border);}
-  .roadmap-dot{width:32px;height:32px;border-radius:999px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;z-index:1;}
+  .dot{width:7px;height:7px;border-radius:999px;background:var(--teal);flex-shrink:0;}
   .time-tag{font-size:12px;color:var(--goldDim);width:110px;flex-shrink:0;}
+  .badges-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  @media (min-width:768px){.badges-grid{grid-template-columns:repeat(3,1fr);}}
+  .roadmap-step{display:flex;gap:16px;padding-bottom:24px;position:relative;}
+  .roadmap-step:not(:last-child)::before{content:"";position:absolute;right:15px;top:32px;bottom:0;width:2px;background:var(--border);}
+  .roadmap-dot{width:32px;height:32px;border-radius:999px;flex-shrink:0;display:flex;align-items:center;justify-content:center;z-index:1;}
 </style>
 </head>
 <body>
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
-      <span class="qamariya" data-size="40"></span>
+      <div class="brand-mark"><span class="nav-ico" data-icon="arch" data-size="20"></span></div>
       <div class="brand-text">
         <div class="title">AI Topper</div>
-        <div class="sub">Smart</div>
+        <div class="sub">SMART</div>
       </div>
     </div>
     <nav>
-      <button class="active" data-target="dashboard"><span class="icon">📊</span><span class="label">لوحة التحكم</span></button>
-      <button data-target="teacher"><span class="icon">🤖</span><span class="label">المعلم الذكي</span></button>
-      <button data-target="book"><span class="icon">📖</span><span class="label">الكراسة الرقمية</span></button>
-      <button data-target="exams"><span class="icon">📝</span><span class="label">الاختبارات</span></button>
-      <button data-target="solver"><span class="icon">📷</span><span class="label">حل المسائل بالتصوير</span></button>
-      <button data-target="challenge"><span class="icon">🎮</span><span class="label">وضع التحدي</span></button>
-      <button data-target="time"><span class="icon">⏰</span><span class="label">إدارة الوقت</span></button>
-      <button data-target="tutors"><span class="icon">👨‍🏫</span><span class="label">حجز المدرسين</span></button>
-      <button data-target="community"><span class="icon">💬</span><span class="label">مجتمع الطلاب</span></button>
-      <button data-target="parent"><span class="icon">👨‍👩‍👦</span><span class="label">بوابة ولي الأمر</span></button>
-      <button data-target="profile"><span class="icon">👤</span><span class="label">الملف الشخصي</span></button>
-      <button data-target="roadmap"><span class="icon">🗺️</span><span class="label">خريطة النجاح</span></button>
-      <button data-target="achievements"><span class="icon">🏅</span><span class="label">الإنجازات</span></button>
+      <button class="active" data-target="dashboard"><span class="nav-ico" data-icon="dashboard"></span><span class="label">لوحة التحكم</span></button>
+      <button data-target="teacher"><span class="nav-ico" data-icon="chat"></span><span class="label">المعلم الذكي</span></button>
+      <button data-target="book"><span class="nav-ico" data-icon="book"></span><span class="label">الكراسة الرقمية</span></button>
+      <button data-target="exams"><span class="nav-ico" data-icon="clipboard"></span><span class="label">الاختبارات</span></button>
+      <button data-target="solver"><span class="nav-ico" data-icon="camera"></span><span class="label">حل المسائل بالتصوير</span></button>
+      <button data-target="challenge"><span class="nav-ico" data-icon="trophy"></span><span class="label">وضع التحدي</span></button>
+      <button data-target="tutors"><span class="nav-ico" data-icon="teacherCap"></span><span class="label">حجز المدرسين</span></button>
+      <button data-target="community"><span class="nav-ico" data-icon="community"></span><span class="label">مجتمع الطلاب</span></button>
+      <button data-target="time"><span class="nav-ico" data-icon="clock"></span><span class="label">إدارة الوقت</span></button>
+      <button data-target="parent"><span class="nav-ico" data-icon="parent"></span><span class="label">بوابة ولي الأمر</span></button>
+      <button data-target="roadmap"><span class="nav-ico" data-icon="map"></span><span class="label">خريطة النجاح</span></button>
+      <button data-target="achievements"><span class="nav-ico" data-icon="award"></span><span class="label">الإنجازات</span></button>
+      <button data-target="profile"><span class="nav-ico" data-icon="user"></span><span class="label">الملف الشخصي</span></button>
     </nav>
     <div class="user-row">
       <div class="avatar">أ</div>
@@ -157,37 +148,34 @@
 
     <section id="dashboard" class="section active">
       <div class="hero">
-        <div>
-          <div style="color:var(--goldDim);font-size:13px;margin-bottom:6px;">مساء الخير، أحمد 👋</div>
-          <h1>أنت على بعد 3% من الوصول لهدفك في الفيزياء</h1>
-          <p style="color:var(--creamDim);font-size:14px;max-width:420px;">استمر في وتيرتك، سلسلة دراستك المتواصلة تقربك من قائمة أوائل الجمهورية.</p>
-        </div>
-        <span class="qamariya qamariya-glow" data-size="130"></span>
+        <div class="eyebrow"><span class="nav-ico" data-icon="flame" data-size="14"></span> سلسلة الدراسة 12 يوماً</div>
+        <h1>أنت على بعد <span class="mark">3%</span> من الوصول لهدفك في الفيزياء</h1>
+        <p style="color:var(--creamDim);font-size:14px;max-width:460px;margin:0;">استمر في وتيرتك، سلسلة دراستك المتواصلة تقربك من قائمة أوائل الجمهورية.</p>
       </div>
       <div class="stats">
         <div class="card">
-          <div class="stat-label"><span>سلسلة الدراسة</span><span>🔥</span></div>
+          <div class="stat-label"><span>سلسلة الدراسة</span><span class="nav-ico stat-ico" data-icon="flame" style="color:var(--brick);"></span></div>
           <div class="stat-value">12 يوم</div>
           <div class="stat-sub" style="color:var(--brick);">استمر!</div>
         </div>
         <div class="card">
-          <div class="stat-label"><span>المعدل المتوقع</span><span>📈</span></div>
+          <div class="stat-label"><span>المعدل المتوقع</span><span class="nav-ico stat-ico" data-icon="trending" style="color:var(--teal);"></span></div>
           <div class="stat-value">87%</div>
           <div class="stat-sub" style="color:var(--teal);">+3% هذا الأسبوع</div>
         </div>
         <div class="card">
-          <div class="stat-label"><span>الترتيب العام</span><span>🏆</span></div>
+          <div class="stat-label"><span>الترتيب العام</span><span class="nav-ico stat-ico" data-icon="award" style="color:var(--gold);"></span></div>
           <div class="stat-value">#15</div>
           <div class="stat-sub" style="color:var(--gold);">من 500 طالب</div>
         </div>
         <div class="card">
-          <div class="stat-label"><span>ساعات الدراسة</span><span>📚</span></div>
+          <div class="stat-label"><span>ساعات الدراسة</span><span class="nav-ico stat-ico" data-icon="book" style="color:var(--cream);"></span></div>
           <div class="stat-value">4.6 س</div>
           <div class="stat-sub" style="color:var(--cream);">اليوم</div>
         </div>
       </div>
       <div class="card">
-        <h2 style="font-family:'Cairo',sans-serif;margin-top:0;">الدرجة الحالية مقابل المتوقعة</h2>
+        <h2 style="font-family:'Cairo',sans-serif;margin-top:0;font-size:16px;">الدرجة الحالية مقابل المتوقعة</h2>
         <canvas id="gradesChart" height="110"></canvas>
       </div>
     </section>
@@ -195,21 +183,21 @@
     <section id="teacher" class="section">
       <div class="chat-window">
         <div class="chat-header">
-          <span class="qamariya" data-size="36"></span>
+          <div class="brand-mark" style="width:34px;height:34px;"><span class="nav-ico" data-icon="arch" data-size="16"></span></div>
           <div>
-            <div style="font-family:'Cairo',sans-serif;font-weight:700;">المعلم الذكي</div>
+            <div style="font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;">المعلم الذكي</div>
             <div class="status">متصل الآن</div>
           </div>
           <div class="key-row">
-            <button id="loadLocalAiBtn" class="chip" style="font-size:11px;">🧠 تفعيل AI محلي حقيقي</button>
-            <select id="personaSelect" style="background:var(--panelLight);border:1px solid var(--border);border-radius:8px;color:var(--cream);font-size:11px;padding:6px 8px;">
+            <button id="loadLocalAiBtn" class="chip">🧠 تفعيل AI محلي حقيقي</button>
+            <select id="personaSelect">
               <option value="friendly">🙂 لطيف ومشجّع</option>
               <option value="strict">🧐 صارم ومباشر</option>
               <option value="energetic">🔥 حماسي</option>
             </select>
           </div>
         </div>
-        <div id="localAiProgress" style="display:none;font-size:11px;color:var(--goldDim);padding:6px 20px;border-bottom:1px solid var(--border);"></div>
+        <div id="localAiProgress" style="display:none;font-size:11px;color:var(--goldDim);padding:6px 20px;border-bottom:1px dashed var(--border);"></div>
         <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-quick">
           <button class="chip" data-fill="اشرح: ">اشرح</button>
@@ -218,9 +206,9 @@
           <button class="chip" data-fill="أعطني مثال: ">أعطني مثال</button>
         </div>
         <div class="chat-input-row">
-          <button class="icon-btn">🎤</button>
+          <button class="icon-btn"><span class="nav-ico" data-icon="mic"></span></button>
           <textarea id="chatInput" rows="1" placeholder="اكتب سؤالك هنا..."></textarea>
-          <button class="send-btn" id="sendBtn">➤</button>
+          <button class="send-btn" id="sendBtn"><span class="nav-ico" data-icon="send"></span></button>
         </div>
       </div>
     </section>
@@ -232,21 +220,21 @@
           <div style="display:flex;justify-content:space-between;align-items:center;">
             <span id="bookPageIndicator" style="font-size:12px;color:var(--goldDim);"></span>
             <div style="display:flex;gap:8px;">
-              <button class="icon-btn" id="prevPageBtn">→</button>
-              <button class="icon-btn" id="nextPageBtn">←</button>
+              <button class="icon-btn" id="prevPageBtn"><span class="nav-ico" data-icon="arrowRight"></span></button>
+              <button class="icon-btn" id="nextPageBtn"><span class="nav-ico" data-icon="arrowLeft"></span></button>
             </div>
           </div>
-          <h2 id="bookTitle" style="font-family:'Cairo',sans-serif;"></h2>
+          <h2 id="bookTitle" style="font-family:'Cairo',sans-serif;font-size:18px;"></h2>
           <p id="bookContent" style="line-height:2;color:var(--creamDim);font-size:14px;"></p>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="chip" id="summarizeBtn">✨ لخّص الصفحة</button>
-            <button class="btn-gold" id="explainBtn" style="font-size:12px;padding:8px 16px;">✨ اشرح بالذكاء</button>
+            <button class="chip" id="summarizeBtn"><span class="nav-ico" data-icon="sparkles" data-size="13"></span> لخّص الصفحة</button>
+            <button class="btn-gold" id="explainBtn" style="font-size:12px;padding:8px 16px;display:flex;align-items:center;gap:6px;"><span class="nav-ico" data-icon="sparkles" data-size="13"></span> اشرح بالذكاء</button>
           </div>
           <div id="aiPanel" class="card" style="display:none;background:var(--panelLight);margin-top:6px;font-size:14px;white-space:pre-wrap;"></div>
         </div>
         <div class="card">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-            <span>🗒️</span><h3 style="font-family:'Cairo',sans-serif;margin:0;">ملاحظاتي</h3>
+            <span class="nav-ico" data-icon="book" data-size="16"></span><h3 style="font-family:'Cairo',sans-serif;margin:0;font-size:15px;">ملاحظاتي</h3>
           </div>
           <div id="notesList" style="max-height:220px;overflow-y:auto;"></div>
           <div class="note-input-row">
@@ -259,10 +247,10 @@
 
     <section id="exams" class="section">
       <div id="examListView">
-        <div class="card" style="background:linear-gradient(135deg,var(--panel),var(--panelLight));display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
           <div>
             <div style="font-size:12px;color:var(--creamDim);">العد التنازلي لاختبارك الوزاري القادم</div>
-            <div id="examCountdown" style="font-family:'Cairo',sans-serif;font-size:22px;font-weight:800;color:var(--gold);margin-top:4px;"></div>
+            <div id="examCountdown" style="font-family:'Cairo',sans-serif;font-size:20px;font-weight:800;color:var(--gold);margin-top:4px;"></div>
           </div>
           <div style="font-size:12px;color:var(--teal);max-width:260px;">📌 خطة مراجعة مكثفة متاحة بتاب "إدارة الوقت"</div>
         </div>
@@ -278,54 +266,68 @@
     <section id="solver" class="section">
       <h1 class="page-title">حل المسائل بالتصوير</h1>
       <div class="card" style="text-align:center;padding:40px 20px;">
-        <div style="font-size:40px;margin-bottom:10px;">📷</div>
+        <div style="display:flex;justify-content:center;margin-bottom:12px;"><span class="nav-ico" data-icon="camera" data-size="34" style="color:var(--gold);"></span></div>
         <p style="color:var(--creamDim);font-size:14px;margin-bottom:16px;">صوّر سؤالك الورقي أو ارفع صورة له، وسيقوم النظام بتحليله وتقديم الحل خطوة بخطوة.</p>
         <input type="file" id="solverInput" accept="image/*" style="display:none;" />
-        <button class="btn-gold" id="solverBtn">📁 اختر صورة السؤال</button>
+        <button class="btn-gold" id="solverBtn">اختر صورة السؤال</button>
         <div id="solverResult" style="display:none;text-align:right;margin-top:20px;"></div>
       </div>
     </section>
 
     <section id="challenge" class="section">
-      <h1 class="page-title">وضع التحدي 🎮</h1>
+      <h1 class="page-title">وضع التحدي</h1>
       <div class="stats">
         <div class="card">
-          <div class="stat-label"><span>نقاطك</span><span>⭐</span></div>
+          <div class="stat-label"><span>نقاطك</span><span class="nav-ico stat-ico" data-icon="award" style="color:var(--gold);"></span></div>
           <div class="stat-value">1,240</div>
           <div class="stat-sub" style="color:var(--gold);">+80 اليوم</div>
         </div>
         <div class="card">
-          <div class="stat-label"><span>الشارات</span><span>🏅</span></div>
+          <div class="stat-label"><span>الشارات</span><span class="nav-ico stat-ico" data-icon="award" style="color:var(--teal);"></span></div>
           <div class="stat-value">6</div>
           <div class="stat-sub" style="color:var(--teal);">آخرها: "مثابر"</div>
         </div>
         <div class="card">
-          <div class="stat-label"><span>ترتيبك بالتحدي</span><span>🥈</span></div>
+          <div class="stat-label"><span>ترتيبك بالتحدي</span><span class="nav-ico stat-ico" data-icon="trophy" style="color:var(--brick);"></span></div>
           <div class="stat-value">#2</div>
           <div class="stat-sub" style="color:var(--brick);">من 40 طالب بصفك</div>
         </div>
       </div>
       <div class="card">
-        <h2 style="font-family:'Cairo',sans-serif;margin-top:0;">لوحة الصدارة الأسبوعية</h2>
+        <h2 style="font-family:'Cairo',sans-serif;margin-top:0;font-size:16px;">لوحة الصدارة الأسبوعية</h2>
         <div id="leaderboard"></div>
       </div>
       <div class="card">
-        <h2 style="font-family:'Cairo',sans-serif;margin-top:0;">مهمة اليوم الإجبارية</h2>
+        <h2 style="font-family:'Cairo',sans-serif;margin-top:0;font-size:16px;">مهمة اليوم الإجبارية</h2>
         <p style="font-size:14px;color:var(--creamDim);">أكمل 15 سؤال مراجعة في مادة الكيمياء قبل الساعة 9 مساءً لتحافظ على سلسلتك.</p>
-        <div style="background:var(--panelLight);border-radius:999px;height:10px;overflow:hidden;margin-top:10px;">
+        <div style="background:var(--panelLight);border-radius:999px;height:9px;overflow:hidden;margin-top:10px;">
           <div style="background:var(--gold);height:100%;width:60%;"></div>
         </div>
         <div style="font-size:12px;color:var(--goldDim);margin-top:6px;">9 من 15 سؤال</div>
       </div>
     </section>
 
+    <section id="tutors" class="section">
+      <h1 class="page-title">حجز المدرسين</h1>
+      <div class="exam-grid" id="tutorsGrid"></div>
+    </section>
+
+    <section id="community" class="section">
+      <h1 class="page-title">مجتمع الطلاب</h1>
+      <div class="card">
+        <textarea id="communityInput" rows="2" placeholder="اطرح سؤالاً أو شارك ما تعلمته اليوم..." style="width:100%;resize:none;border-radius:10px;padding:12px 16px;background:var(--panelLight);color:var(--cream);border:1px solid var(--border);font-family:'Tajawal',sans-serif;font-size:14px;"></textarea>
+        <button class="btn-gold" id="communityPostBtn" style="margin-top:10px;">نشر</button>
+      </div>
+      <div id="communityFeed" style="display:flex;flex-direction:column;gap:14px;"></div>
+    </section>
+
     <section id="time" class="section">
       <h1 class="page-title">جدولك اليوم</h1>
       <div class="card" id="scheduleCard"></div>
-      <div class="card" style="background:var(--panelLight);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
         <div>
           <div style="font-size:13px;color:var(--creamDim);">الوقت الضائع اليوم</div>
-          <div style="font-family:'Cairo',sans-serif;font-size:24px;font-weight:800;">42 دقيقة</div>
+          <div style="font-family:'Cairo',sans-serif;font-size:22px;font-weight:800;">42 دقيقة</div>
         </div>
         <div style="font-size:12px;color:var(--teal);max-width:280px;">💡 جرّب تقليل وقت التنقل بين المواد لتوفير وقت إضافي للمراجعة</div>
       </div>
@@ -334,52 +336,20 @@
     <section id="parent" class="section">
       <h1 class="page-title">بوابة ولي الأمر</h1>
       <div class="card">
-        <h2 style="font-family:'Cairo',sans-serif;margin-top:0;">تقرير هذا الأسبوع</h2>
+        <h2 style="font-family:'Cairo',sans-serif;margin-top:0;font-size:16px;">تقرير هذا الأسبوع</h2>
         <p style="font-size:14px;line-height:1.9;color:var(--creamDim);">
           أحمد يحافظ على سلسلة دراسة 12 يوماً متتالياً، وتحسّن أداؤه في مادة الفيزياء بنسبة 4%. لوحظ تراجع بسيط في التركيز خلال
           مذاكرة الكيمياء مساء الأربعاء — ننصح بتقسيم جلسات المذاكرة إلى فترات أقصر مع فواصل راحة.
         </p>
       </div>
       <div class="card" style="border-color:var(--brick);display:flex;align-items:center;gap:14px;">
-        <span style="font-size:22px;">✅</span>
+        <span class="nav-ico" data-icon="check" data-size="22" style="color:var(--teal);"></span>
         <div style="font-size:14px;">لا توجد تنبيهات مبكرة حالياً — أداء أحمد مستقر ومتصاعد.</div>
       </div>
     </section>
 
-    <section id="profile" class="section">
-      <h1 class="page-title">الملف الشخصي</h1>
-      <div class="profile-grid">
-        <div class="card" style="text-align:center;">
-          <div class="avatar" style="width:90px;height:90px;font-size:30px;margin:0 auto 14px;">أ</div>
-          <div style="font-family:'Cairo',sans-serif;font-weight:700;font-size:18px;">أحمد سالم</div>
-          <div style="font-size:12px;color:var(--creamDim);">الصف الثالث الثانوي — علمي</div>
-          <div class="kv"><span style="color:var(--creamDim);">تاريخ الانضمام</span><span>1 سبتمبر 2025</span></div>
-          <div class="kv"><span style="color:var(--creamDim);">الترتيب العام</span><span style="color:var(--gold);">#15 من 500</span></div>
-          <div class="kv"><span style="color:var(--creamDim);">سلسلة الدراسة</span><span style="color:var(--brick);">12 يوم 🔥</span></div>
-        </div>
-        <div class="card">
-          <h2 style="font-family:'Cairo',sans-serif;margin-top:0;">درجاتي في جميع المواد</h2>
-          <canvas id="pieChart" height="220"></canvas>
-        </div>
-      </div>
-    </section>
-
-    <section id="tutors" class="section">
-      <h1 class="page-title">حجز المدرسين 👨‍🏫</h1>
-      <div class="exam-grid" id="tutorsGrid"></div>
-    </section>
-
-    <section id="community" class="section">
-      <h1 class="page-title">مجتمع الطلاب 💬</h1>
-      <div class="card">
-        <textarea id="communityInput" rows="2" placeholder="اطرح سؤالاً أو شارك ما تعلمته اليوم..." style="width:100%;resize:none;border-radius:12px;padding:12px 16px;background:var(--panelLight);color:var(--cream);border:1px solid var(--border);font-family:'Tajawal',sans-serif;font-size:14px;"></textarea>
-        <button class="btn-gold" id="communityPostBtn" style="margin-top:10px;">نشر</button>
-      </div>
-      <div id="communityFeed" style="display:flex;flex-direction:column;gap:14px;"></div>
-    </section>
-
     <section id="roadmap" class="section">
-      <h1 class="page-title">خريطة النجاح 🗺️</h1>
+      <h1 class="page-title">خريطة النجاح</h1>
       <div class="card">
         <p style="font-size:14px;color:var(--creamDim);margin-bottom:24px;">مسارك نحو قائمة أوائل الجمهورية — كل نقطة إنجاز فعلي بنيت عليه.</p>
         <div id="roadmapTrack" style="display:flex;flex-direction:column;gap:0;"></div>
@@ -387,8 +357,26 @@
     </section>
 
     <section id="achievements" class="section">
-      <h1 class="page-title">الإنجازات 🏅</h1>
+      <h1 class="page-title">الإنجازات</h1>
       <div class="badges-grid" id="badgesGrid"></div>
+    </section>
+
+    <section id="profile" class="section">
+      <h1 class="page-title">الملف الشخصي</h1>
+      <div class="profile-grid">
+        <div class="card" style="text-align:center;">
+          <div class="avatar" style="width:88px;height:88px;font-size:28px;margin:0 auto 14px;">أ</div>
+          <div style="font-family:'Cairo',sans-serif;font-weight:700;font-size:17px;">أحمد سالم</div>
+          <div style="font-size:12px;color:var(--creamDim);">الصف الثالث الثانوي — علمي</div>
+          <div class="kv"><span style="color:var(--creamDim);">تاريخ الانضمام</span><span>1 سبتمبر 2025</span></div>
+          <div class="kv"><span style="color:var(--creamDim);">الترتيب العام</span><span style="color:var(--gold);">#15 من 500</span></div>
+          <div class="kv"><span style="color:var(--creamDim);">سلسلة الدراسة</span><span style="color:var(--brick);">12 يوم</span></div>
+        </div>
+        <div class="card">
+          <h2 style="font-family:'Cairo',sans-serif;margin-top:0;font-size:16px;">درجاتي في جميع المواد</h2>
+          <canvas id="pieChart" height="220"></canvas>
+        </div>
+      </div>
     </section>
 
   </main>
@@ -403,7 +391,7 @@ const subjects = [
   { name: "العربية", current: 85, expected: 88 },
   { name: "الإنجليزية", current: 80, expected: 84 },
 ];
-const pieColors = ["#2F8F84", "#A64B3A", "#D4A44C", "#F0E6D2", "#8C6D33", "#5C7A6E"];
+const pieColors = ["#7EC8E3", "#E85D4E", "#F2C94C", "#F4F3EE", "#C9A227", "#5C9C86"];
 
 const examsData = [
   { name: "اختبار وزاري - الرياضيات 2024", type: "وزاري", difficulty: "متوسط", time: "90 دقيقة" },
@@ -411,7 +399,7 @@ const examsData = [
   { name: "اختبار ذكي - مراجعة شاملة الكيمياء", type: "ذكي", difficulty: "متكيف", time: "45 دقيقة" },
   { name: "اختبار وزاري - الأحياء 2023", type: "وزاري", difficulty: "سهل", time: "75 دقيقة" },
 ];
-const typeColor = { "وزاري": "#A64B3A", "تجريبي": "#2F8F84", "ذكي": "#D4A44C" };
+const typeColor = { "وزاري": "#E85D4E", "تجريبي": "#7EC8E3", "ذكي": "#F2C94C" };
 
 const questionBank = {
   "اختبار وزاري - الرياضيات 2024": [
@@ -450,28 +438,37 @@ const schedule = [
   { time: "8:30 - 9:15 م", task: "اختبار ذكي - الكيمياء" },
 ];
 
-function polar(cx, cy, r, deg) {
-  const rad = (deg * Math.PI) / 180;
-  return { x: cx + r * Math.cos(rad), y: cy - r * Math.sin(rad) };
+const ICONS = {
+  arch: '<path d="M5 20V11a7 7 0 0 1 14 0v9"/><path d="M5 20h14"/>',
+  dashboard: '<rect x="3.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.4"/>',
+  chat: '<path d="M4 5h16v11H8l-4 4V5z"/><circle cx="9" cy="10.5" r=".7" fill="currentColor" stroke="none"/><circle cx="12" cy="10.5" r=".7" fill="currentColor" stroke="none"/><circle cx="15" cy="10.5" r=".7" fill="currentColor" stroke="none"/>',
+  book: '<path d="M4 5.5C6 4.5 9 4.5 12 5.5V19.5C9 18.5 6 18.5 4 19.5V5.5Z"/><path d="M20 5.5C18 4.5 15 4.5 12 5.5V19.5C15 18.5 18 18.5 20 19.5V5.5Z"/>',
+  clipboard: '<rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2.5" width="6" height="3" rx="1"/><path d="M8.5 12l2 2 4-4.5"/>',
+  camera: '<path d="M4 8h3l1.5-2h7L17 8h3v11H4V8z"/><circle cx="12" cy="13.5" r="3"/>',
+  trophy: '<path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M7 5H4a3 3 0 0 0 3 5"/><path d="M17 5h3a3 3 0 0 1-3 5"/><path d="M12 13v3"/><path d="M9 20h6"/><path d="M10 17h4v3h-4z"/>',
+  teacherCap: '<path d="M3 8l9-4 9 4-9 4-9-4z"/><path d="M7 10v4c0 1.5 2.5 3 5 3s5-1.5 5-3v-4"/><path d="M20 8v5"/>',
+  community: '<circle cx="8.5" cy="9" r="2.5"/><circle cx="16" cy="9" r="2.2"/><path d="M4 18c0-2.5 2-4.2 4.5-4.2S13 15.5 13 18"/><path d="M13.5 18c0-2 1.7-3.6 4-3.6s4 1.6 4 3.6"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  parent: '<circle cx="8" cy="7" r="2.6"/><circle cx="16" cy="9" r="2"/><path d="M3.5 19c0-3 2-5 4.5-5s4.5 2 4.5 5"/><path d="M13 19c0-2.2 1.6-4 3.5-4s3.5 1.8 3.5 4"/>',
+  map: '<path d="M9 4.5 4 6.5v13l5-2 6 2 5-2v-13l-5 2-6-2z"/><path d="M9 4.5v13"/><path d="M15 6.5v13"/>',
+  award: '<circle cx="12" cy="9" r="5"/><path d="M9 13.5 7.5 20l4.5-2.5 4.5 2.5-1.5-6.5"/>',
+  user: '<circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/>',
+  flame: '<path d="M12 3c1 3-2 4-2 7a4 4 0 0 0 8 0c0-1.5-1-2-1-2 1 4-1 6-3 6a4 4 0 0 1-4-4c0-3 3-4 2-7z"/>',
+  trending: '<path d="M4 16l5-5 4 4 7-8"/><path d="M15 7h5v5"/>',
+  mic: '<rect x="9.5" y="3" width="5" height="10" rx="2.5"/><path d="M6 11a6 6 0 0 0 12 0"/><path d="M12 17v3"/><path d="M9 20h6"/>',
+  send: '<path d="M4 12l16-7-6 16-2.5-6.5L4 12z"/>',
+  arrowRight: '<path d="M9 6l6 6-6 6"/>',
+  arrowLeft: '<path d="M15 6l-6 6 6 6"/>',
+  sparkles: '<path d="M12 3l1.2 3.6L17 8l-3.8 1.4L12 13l-1.2-3.6L7 8l3.8-1.4L12 3z"/><path d="M19 14l.5 1.6 1.6.6-1.6.6-.5 1.6-.5-1.6-1.6-.6 1.6-.6.5-1.6z"/>',
+  check: '<path d="M5 13l4 4 10-10"/>',
+  xmark: '<path d="M6 6l12 12M18 6L6 18"/>',
+};
+function icon(name, size) {
+  size = size || 20;
+  return "<svg width=\"" + size + "\" height=\"" + size + "\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\">" + (ICONS[name] || "") + "</svg>";
 }
-function qamariyaSVG(size) {
-  const cx = 100, cy = 100, r = 90;
-  const palette = ["#2F8F84", "#A64B3A", "#D4A44C", "#F0E6D2", "#2F8F84", "#A64B3A", "#D4A44C", "#F0E6D2"];
-  let wedges = "";
-  for (let i = 0; i < 8; i++) {
-    const a1 = i * 22.5, a2 = (i + 1) * 22.5;
-    const p1 = polar(cx, cy, r, a1), p2 = polar(cx, cy, r, a2);
-    wedges += `<path d="M${cx},${cy} L${p1.x.toFixed(2)},${p1.y.toFixed(2)} A${r},${r} 0 0,0 ${p2.x.toFixed(2)},${p2.y.toFixed(2)} Z" fill="${palette[i]}" opacity="0.88" stroke="#1A140F" stroke-width="1.5"/>`;
-  }
-  return `<svg width="${size}" height="${size / 2 + 20}" viewBox="0 0 200 120">
-    <rect x="0" y="98" width="200" height="4" fill="#8C6D33"/>
-    ${wedges}
-    <circle cx="100" cy="100" r="14" fill="#1A140F" stroke="#D4A44C" stroke-width="2"/>
-    <circle cx="100" cy="100" r="6" fill="#D4A44C"/>
-  </svg>`;
-}
-document.querySelectorAll(".qamariya").forEach((el) => {
-  el.innerHTML = qamariyaSVG(parseInt(el.dataset.size, 10));
+document.querySelectorAll("[data-icon]").forEach((el) => {
+  el.innerHTML = icon(el.dataset.icon, el.dataset.size ? +el.dataset.size : 20);
 });
 
 document.querySelectorAll("nav button").forEach((btn) => {
@@ -489,16 +486,16 @@ new Chart(document.getElementById("gradesChart"), {
   data: {
     labels: subjects.map((s) => s.name),
     datasets: [
-      { label: "الحالية", data: subjects.map((s) => s.current), backgroundColor: "#2F8F84", borderRadius: 6 },
-      { label: "المتوقعة", data: subjects.map((s) => s.expected), backgroundColor: "#D4A44C", borderRadius: 6 },
+      { label: "الحالية", data: subjects.map((s) => s.current), backgroundColor: "#7EC8E3", borderRadius: 5 },
+      { label: "المتوقعة", data: subjects.map((s) => s.expected), backgroundColor: "#F2C94C", borderRadius: 5 },
     ],
   },
   options: {
     responsive: true,
-    plugins: { legend: { labels: { color: "#B8AA92" } } },
+    plugins: { legend: { labels: { color: "#A9C2B8" } } },
     scales: {
-      x: { ticks: { color: "#B8AA92" }, grid: { color: "#3D3024" } },
-      y: { ticks: { color: "#B8AA92" }, grid: { color: "#3D3024" } },
+      x: { ticks: { color: "#A9C2B8" }, grid: { color: "rgba(244,243,238,.08)" } },
+      y: { ticks: { color: "#A9C2B8" }, grid: { color: "rgba(244,243,238,.08)" } },
     },
   },
 });
@@ -512,23 +509,14 @@ function renderPieChart() {
       labels: subjects.map((s) => s.name),
       datasets: [{ data: subjects.map((s) => s.current), backgroundColor: pieColors }],
     },
-    options: { plugins: { legend: { labels: { color: "#B8AA92" } } } },
+    options: { plugins: { legend: { labels: { color: "#A9C2B8" } } } },
   });
 }
 
 const examGrid = document.getElementById("examGrid");
 examGrid.innerHTML = examsData
   .map(
-    (exam, i) => `
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <span class="badge" style="color:${typeColor[exam.type]};">${exam.type}</span>
-      <span style="font-size:12px;color:var(--creamDim);">${exam.time}</span>
-    </div>
-    <div style="font-family:'Cairo',sans-serif;font-weight:700;margin-top:10px;">${exam.name}</div>
-    <div style="font-size:12px;color:var(--creamDim);margin-top:4px;">مستوى الصعوبة: ${exam.difficulty}</div>
-    <button class="exam-btn" onclick="openExam(${i})">ابدأ الاختبار</button>
-  </div>`
+    (exam, i) => "<div class=\"card\"><div style=\"display:flex;justify-content:space-between;align-items:center;\"><span class=\"badge\" style=\"color:" + typeColor[exam.type] + ";\">" + exam.type + "</span><span style=\"font-size:12px;color:var(--creamDim);\">" + exam.time + "</span></div><div style=\"font-family:'Cairo',sans-serif;font-weight:700;margin-top:10px;font-size:14px;\">" + exam.name + "</div><div style=\"font-size:12px;color:var(--creamDim);margin-top:4px;\">مستوى الصعوبة: " + exam.difficulty + "</div><button class=\"exam-btn\" onclick=\"openExam(" + i + ")\">ابدأ الاختبار</button></div>"
   )
   .join("");
 
@@ -556,52 +544,40 @@ function submitExam() {
 function renderExam(submitted) {
   const exam = examsData[currentExamIndex];
   const questions = questionBank[exam.name] || [];
-  let html = `<div style="display:flex;justify-content:space-between;align-items:center;">
-    <div>
-      <h1 style="font-family:'Cairo',sans-serif;font-weight:800;font-size:19px;margin:0;">${exam.name}</h1>
-      <div style="font-size:12px;color:var(--creamDim);">${exam.time} · ${questions.length} أسئلة</div>
-    </div>
-    <button class="chip" onclick="exitExam()">خروج</button>
-  </div>`;
+  let html = "<div style=\"display:flex;justify-content:space-between;align-items:center;\"><div><h1 style=\"font-family:'Cairo',sans-serif;font-weight:800;font-size:18px;margin:0;\">" + exam.name + "</h1><div style=\"font-size:12px;color:var(--creamDim);\">" + exam.time + " · " + questions.length + " أسئلة</div></div><button class=\"chip\" onclick=\"exitExam()\">خروج</button></div>";
 
   if (!submitted) {
     questions.forEach((q, qi) => {
-      html += `<div class="card"><div style="font-family:'Cairo',sans-serif;font-weight:700;margin-bottom:6px;font-size:14px;">${qi + 1}. ${q.q}</div><div class="options-grid">`;
+      html += "<div class=\"card\"><div style=\"font-family:'Cairo',sans-serif;font-weight:700;margin-bottom:6px;font-size:13.5px;\">" + (qi + 1) + ". " + q.q + "</div><div class=\"options-grid\">";
       q.options.forEach((opt, oi) => {
         const sel = currentAnswers[qi] === oi ? "selected" : "";
-        html += `<button class="option-btn ${sel}" onclick="selectAnswer(${qi},${oi})">${opt}</button>`;
+        html += "<button class=\"option-btn " + sel + "\" onclick=\"selectAnswer(" + qi + "," + oi + ")\">" + opt + "</button>";
       });
-      html += `</div></div>`;
+      html += "</div></div>";
     });
-    html += `<button class="btn-gold" style="align-self:flex-start;" onclick="submitExam()">تسليم الاختبار</button>`;
+    html += "<button class=\"btn-gold\" style=\"align-self:flex-start;\" onclick=\"submitExam()\">تسليم الاختبار</button>";
   } else {
     let score = 0;
     questions.forEach((q, qi) => { if (currentAnswers[qi] === q.correct) score++; });
-    html += `<div class="card" style="text-align:center;border-color:var(--goldDim);">
-      <div style="font-size:12px;color:var(--creamDim);">نتيجتك</div>
-      <div style="font-family:'Cairo',sans-serif;font-size:36px;font-weight:800;color:var(--gold);">${score} / ${questions.length}</div>
-    </div>`;
+    html += "<div class=\"card\" style=\"text-align:center;border-color:var(--goldDim);\"><div style=\"font-size:12px;color:var(--creamDim);\">نتيجتك</div><div style=\"font-family:'Cairo',sans-serif;font-size:32px;font-weight:800;color:var(--gold);\">" + score + " / " + questions.length + "</div></div>";
     questions.forEach((q, qi) => {
       const ok = currentAnswers[qi] === q.correct;
-      html += `<div class="card">
-        <div style="font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;">${ok ? "✅" : "❌"} ${q.q}</div>
-        <div style="font-size:12px;color:var(--creamDim);margin-top:4px;">الإجابة الصحيحة: ${q.options[q.correct]}</div>
-      </div>`;
+      html += "<div class=\"card\"><div style=\"display:flex;gap:8px;align-items:flex-start;font-family:'Cairo',sans-serif;font-weight:700;font-size:13.5px;color:" + (ok ? "var(--teal)" : "var(--brick)") + ";\">" + icon(ok ? "check" : "xmark", 16) + "<span style=\"color:var(--cream);\">" + q.q + "</span></div><div style=\"font-size:12px;color:var(--creamDim);margin-top:4px;\">الإجابة الصحيحة: " + q.options[q.correct] + "</div></div>";
     });
-    html += `<button class="chip" onclick="exitExam()">العودة لمركز الاختبارات</button>`;
+    html += "<button class=\"chip\" onclick=\"exitExam()\">العودة لمركز الاختبارات</button>";
   }
   document.getElementById("examQuizView").innerHTML = html;
 }
 
 document.getElementById("scheduleCard").innerHTML = schedule
-  .map((s) => `<div class="schedule-item"><span class="time-tag">${s.time}</span><span class="dot"></span><span style="font-size:14px;">${s.task}</span></div>`)
+  .map((s) => "<div class=\"schedule-item\"><span class=\"time-tag\">" + s.time + "</span><span class=\"dot\"></span><span style=\"font-size:14px;\">" + s.task + "</span></div>")
   .join("");
 
 let currentPage = 0;
 let notes = [{ page: 0, text: "هذا التعريف مهم جداً" }];
 function renderBook() {
   const p = bookPages[currentPage];
-  document.getElementById("bookPageIndicator").textContent = `صفحة ${currentPage + 1} من ${bookPages.length}`;
+  document.getElementById("bookPageIndicator").textContent = "صفحة " + (currentPage + 1) + " من " + bookPages.length;
   document.getElementById("bookTitle").textContent = p.title;
   document.getElementById("bookContent").textContent = p.content;
   document.getElementById("prevPageBtn").disabled = currentPage === 0;
@@ -612,8 +588,8 @@ function renderBook() {
 function renderNotes() {
   const list = notes.filter((n) => n.page === currentPage);
   document.getElementById("notesList").innerHTML = list.length
-    ? list.map((n) => `<div class="note-item">${n.text}</div>`).join("")
-    : `<div style="font-size:12px;color:var(--creamDim);">لا توجد ملاحظات على هذه الصفحة بعد.</div>`;
+    ? list.map((n) => "<div class=\"note-item\">" + n.text + "</div>").join("")
+    : "<div style=\"font-size:12px;color:var(--creamDim);\">لا توجد ملاحظات على هذه الصفحة بعد.</div>";
 }
 document.getElementById("prevPageBtn").addEventListener("click", () => { if (currentPage > 0) { currentPage--; renderBook(); } });
 document.getElementById("nextPageBtn").addEventListener("click", () => { if (currentPage < bookPages.length - 1) { currentPage++; renderBook(); } });
@@ -632,20 +608,18 @@ async function runBookAI(mode) {
   panel.textContent = "جاري التحليل...";
   const p = bookPages[currentPage];
   const prompt = mode === "summary"
-    ? `لخّص النقاط الأساسية في هذا المحتوى التعليمي في نقاط قصيرة جداً:\n\n${p.content}`
-    : `اشرح هذا المحتوى التعليمي لطالب صف ثالث ثانوي بأسلوب مبسط جداً مع مثال واقعي:\n\n${p.content}`;
+    ? "لخّص النقاط الأساسية في هذا المحتوى التعليمي في نقاط قصيرة جداً:\n\n" + p.content
+    : "اشرح هذا المحتوى التعليمي لطالب صف ثالث ثانوي بأسلوب مبسط جداً مع مثال واقعي:\n\n" + p.content;
   panel.textContent = await callClaude("أنت مساعد ذكي داخل عارض كتب لمنصة تعليمية يمنية. ردودك مختصرة وواضحة وبنقاط عند الإمكان.", prompt);
 }
 
 let persona = "friendly";
-document.getElementById("personaSelect").addEventListener("change", (e) => {
-  persona = e.target.value;
-});
+document.getElementById("personaSelect").addEventListener("change", (e) => { persona = e.target.value; });
 
 let messages = [{ role: "assistant", content: "أهلاً بك! أنا معلمك الذكي 👋 اسألني عن أي درس أو مفهوم صعب، وسأساعدك تفهمه خطوة بخطوة." }];
 function renderChat() {
   const el = document.getElementById("chatMessages");
-  el.innerHTML = messages.map((m) => `<div class="msg ${m.role === "user" ? "user" : "bot"}">${escapeHtml(m.content)}</div>`).join("");
+  el.innerHTML = messages.map((m) => "<div class=\"msg " + (m.role === "user" ? "user" : "bot") + "\">" + escapeHtml(m.content) + "</div>").join("");
   el.scrollTop = el.scrollHeight;
 }
 function escapeHtml(str) {
@@ -688,14 +662,11 @@ async function sendChat() {
 let localEngine = null;
 let usingLocalAI = false;
 let localAiLoadAttempted = false;
-
-// نحاول تحميل نموذج DeepSeek الاستدلالي أولاً، وإن لم يتوفر اسمه بمكتبة WebLLM نرجع تلقائياً لبديل مضمون
 const MODEL_CANDIDATES = [
   "DeepSeek-R1-Distill-Qwen-1.5B-q4f16_1-MLC",
   "DeepSeek-R1-Distill-Qwen-7B-q4f16_1-MLC",
   "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
 ];
-
 async function initLocalAI() {
   if (usingLocalAI || localAiLoadAttempted) return;
   localAiLoadAttempted = true;
@@ -710,13 +681,13 @@ async function initLocalAI() {
     let lastError = null;
     for (const modelId of MODEL_CANDIDATES) {
       try {
-        progress.textContent = `جاري تحميل ${modelId} ...`;
+        progress.textContent = "جاري تحميل " + modelId + " ...";
         localEngine = await webllm.CreateMLCEngine(modelId, {
           initProgressCallback: (report) => { progress.textContent = report.text; },
         });
         usingLocalAI = true;
         btn.textContent = "✅ نموذج DeepSeek مفعّل";
-        progress.textContent = `جاهز! أنت الآن تتحدث مع نموذج ${modelId} الحقيقي يعمل بالكامل داخل متصفحك.`;
+        progress.textContent = "جاهز! أنت الآن تتحدث مع نموذج " + modelId + " الحقيقي يعمل بالكامل داخل متصفحك.";
         return;
       } catch (innerErr) {
         lastError = innerErr;
@@ -730,30 +701,22 @@ async function initLocalAI() {
     progress.textContent = "تعذّر التحميل — يتطلب متصفح Chrome أو Edge حديث يدعم WebGPU. اضغط الزر لإعادة المحاولة، وإلا سيُستخدم المحرك المحلي الخفيف.";
   }
 }
-document.getElementById("loadLocalAiBtn").addEventListener("click", () => {
-  localAiLoadAttempted = false;
-  initLocalAI();
-});
-// يبدأ تحميل النموذج تلقائياً فور فتح الصفحة، بدون أي إجراء من الطالب
+document.getElementById("loadLocalAiBtn").addEventListener("click", () => { localAiLoadAttempted = false; initLocalAI(); });
 initLocalAI();
 
 async function callClaude(system, userText) {
   if (usingLocalAI && localEngine) {
     try {
       const res = await localEngine.chat.completions.create({
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: userText },
-        ],
+        messages: [{ role: "system", content: system }, { role: "user", content: userText }],
       });
-      const text = res.choices?.[0]?.message?.content?.trim();
+      const text = res.choices && res.choices[0] && res.choices[0].message && res.choices[0].message.content ? res.choices[0].message.content.trim() : "";
       if (text) return text;
-    } catch (e) {
-      // fall through to the lightweight local reply engine
-    }
+    } catch (e) { /* fall through */ }
   }
   return localReply(userText);
 }
+
 const subjectHints = {
   math: { words: ["معادلة", "دالة", "س", "x", "هندسة", "مثلث", "قطعة", "تفاضل", "تكامل", "رياضيات", "جبر", "احتمال"],
     replies: [
@@ -780,15 +743,12 @@ const subjectHints = {
       "وش الفرق بين هذا وبين العملية المشابهة له اللي درستوها قبل؟ المقارنة تساعد تتذكر التفاصيل.",
     ] },
 };
-
 function detectSubject(text) {
-  const lower = text;
-  for (const [subject, data] of Object.entries(subjectHints)) {
-    if (data.words.some((w) => lower.includes(w))) return subject;
+  for (const key in subjectHints) {
+    if (subjectHints[key].words.some((w) => text.includes(w))) return key;
   }
   return null;
 }
-
 const genericReplies = [
   "سؤال جيد! قبل ما أعطيك الإجابة مباشرة، جرّب تفكر: وش أول خطوة منطقية تقدر تسويها هنا؟",
   "خلّنا نحلها خطوة بخطوة. وش المعطيات اللي عندك في السؤال؟",
@@ -796,13 +756,11 @@ const genericReplies = [
   "طيب، لو تشرح لي وش فهمته من السؤال بكلماتك أنت، أقدر أوجّهك من هناك بشكل أدق.",
   "خطوة أولى مفيدة دائماً: حدد وش تعرفه أكيد من السؤال، ووش لسا مو واضح لك؟",
 ];
-
 const personaWrap = {
   friendly: (t) => t,
   strict: (t) => t.replace(/جرّب|حاول/g, "لازم").replace(/؟$/, ". ركّز وجاوبني بدقة."),
   energetic: (t) => "يلّلا بطل! 💪 " + t + " أنا واثق فيك!",
 };
-
 function localReply(question) {
   const subject = detectSubject(question);
   const pool = subject ? subjectHints[subject].replies : genericReplies;
@@ -811,60 +769,78 @@ function localReply(question) {
   return wrap(pick);
 }
 
-const leaderboardData = [
-  { name: "سارة أحمد", points: 1480, you: false },
-  { name: "أحمد سالم (أنت)", points: 1240, you: true },
-  { name: "محمد قاسم", points: 1190, you: false },
-  { name: "فاطمة علي", points: 1050, you: false },
-  { name: "يوسف ناصر", points: 970, you: false },
+const examDate = new Date();
+examDate.setDate(examDate.getDate() + 23);
+function updateCountdown() {
+  const diff = examDate - new Date();
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  document.getElementById("examCountdown").textContent = days + " يوم و " + hours + " ساعة";
+}
+updateCountdown();
+setInterval(updateCountdown, 60000);
+
+const tutorsData = [
+  { name: "أ. سامي الحداد", subject: "الرياضيات", rating: "4.9", price: "3000 ريال / حصة", slots: ["اليوم 5 م", "غداً 4 م", "غداً 7 م"] },
+  { name: "أ. ريم الشامي", subject: "الفيزياء", rating: "4.8", price: "3500 ريال / حصة", slots: ["اليوم 6 م", "غداً 3 م"] },
+  { name: "أ. خالد مقبل", subject: "الكيمياء", rating: "4.7", price: "2800 ريال / حصة", slots: ["غداً 5 م", "بعد غد 4 م"] },
+  { name: "أ. هدى الصبري", subject: "الأحياء", rating: "5.0", price: "3200 ريال / حصة", slots: ["اليوم 8 م", "غداً 6 م"] },
 ];
-document.getElementById("leaderboard").innerHTML = leaderboardData
+document.getElementById("tutorsGrid").innerHTML = tutorsData
   .map(
-    (p, i) => `<div class="schedule-item" style="${p.you ? "background:var(--panelLight);border-radius:10px;padding:10px;margin-bottom:6px;border-bottom:none;" : ""}">
-      <span style="width:28px;font-family:'Cairo',sans-serif;font-weight:800;color:${i === 0 ? "var(--gold)" : "var(--creamDim)"};">#${i + 1}</span>
-      <span style="flex:1;font-size:14px;${p.you ? "color:var(--gold);font-weight:700;" : ""}">${p.name}</span>
-      <span style="font-size:13px;color:var(--creamDim);">${p.points} نقطة</span>
-    </div>`
+    (t, i) => "<div class=\"card\"><div style=\"display:flex;justify-content:space-between;align-items:center;\"><div style=\"font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;\">" + t.name + "</div><span class=\"badge\" style=\"color:var(--gold);\">⭐ " + t.rating + "</span></div><div style=\"font-size:12px;color:var(--teal);margin-top:4px;\">" + t.subject + "</div><div style=\"font-size:12px;color:var(--creamDim);margin-top:4px;\">" + t.price + "</div><div style=\"display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;\">" + t.slots.map((s, si) => "<button class=\"chip\" onclick=\"bookTutor(" + i + "," + si + ")\" id=\"slot-" + i + "-" + si + "\">" + s + "</button>").join("") + "</div></div>"
   )
   .join("");
+function bookTutor(ti, si) {
+  const btn = document.getElementById("slot-" + ti + "-" + si);
+  btn.innerHTML = icon("check", 13) + " تم الحجز";
+  btn.style.background = "var(--gold)";
+  btn.style.color = "var(--bg)";
+  btn.disabled = true;
+}
+
+let communityPosts = [
+  { name: "سارة أحمد", time: "قبل 20 دقيقة", text: "أحد يقدر يشرح لي درس التفاضل بأسلوب مبسط؟ ما فهمته زين بالحصة 😅" },
+  { name: "محمد قاسم", time: "قبل ساعة", text: "أنهيت اليوم مراجعة كاملة لدرس الديناميكا الحرارية 🔥 اللي يبي ملخصي يقول لي." },
+  { name: "فاطمة علي", time: "قبل 3 ساعات", text: "نصيحة: قسّموا وقت المذاكرة لفترات 25 دقيقة مع راحة 5 دقايق، ساعدتني كثير هالأسبوع 💪" },
+];
+function renderCommunity() {
+  document.getElementById("communityFeed").innerHTML = communityPosts
+    .map(
+      (p) => "<div class=\"card\"><div style=\"display:flex;justify-content:space-between;align-items:center;\"><div style=\"font-family:'Cairo',sans-serif;font-weight:700;font-size:13px;\">" + p.name + "</div><div style=\"font-size:11px;color:var(--creamDim);\">" + p.time + "</div></div><div style=\"font-size:14px;color:var(--creamDim);margin-top:6px;\">" + p.text + "</div></div>"
+    )
+    .join("");
+}
+renderCommunity();
+document.getElementById("communityPostBtn").addEventListener("click", () => {
+  const input = document.getElementById("communityInput");
+  if (!input.value.trim()) return;
+  communityPosts.unshift({ name: "أحمد سالم (أنت)", time: "الآن", text: input.value.trim() });
+  input.value = "";
+  renderCommunity();
+});
 
 document.getElementById("solverBtn").addEventListener("click", () => document.getElementById("solverInput").click());
 document.getElementById("solverInput").addEventListener("change", async (e) => {
   if (!e.target.files.length) return;
   const result = document.getElementById("solverResult");
   result.style.display = "block";
-  result.innerHTML = `<div class="card">جاري تحليل الصورة واستخراج المسألة...</div>`;
+  result.innerHTML = "<div class=\"card\">جاري تحليل الصورة واستخراج المسألة...</div>";
   await new Promise((r) => setTimeout(r, 1200));
-  result.innerHTML = `
-    <div class="card">
-      <div style="font-family:'Cairo',sans-serif;font-weight:700;margin-bottom:8px;">📝 المسألة المستخرجة (تجريبي)</div>
-      <div style="font-size:14px;color:var(--creamDim);margin-bottom:14px;">أوجد قيمة x في المعادلة: 3x - 5 = 16</div>
-      <div style="font-family:'Cairo',sans-serif;font-weight:700;margin-bottom:6px;">✅ الحل خطوة بخطوة</div>
-      <div style="font-size:14px;line-height:2;color:var(--creamDim);">
-        1) أضف 5 لطرفي المعادلة: 3x = 21<br/>
-        2) اقسم الطرفين على 3: x = 7
-      </div>
-      <div style="font-size:11px;color:var(--goldDim);margin-top:12px;">* هذا عرض تجريبي لآلية العمل — الربط بمحرك OCR/رؤية حقيقي يحتاج خادم خلفي.</div>
-    </div>`;
+  result.innerHTML = "<div class=\"card\"><div style=\"font-family:'Cairo',sans-serif;font-weight:700;margin-bottom:8px;font-size:14px;\">المسألة المستخرجة (تجريبي)</div><div style=\"font-size:14px;color:var(--creamDim);margin-bottom:14px;\">أوجد قيمة x في المعادلة: 3x - 5 = 16</div><div style=\"font-family:'Cairo',sans-serif;font-weight:700;margin-bottom:6px;font-size:14px;\">الحل خطوة بخطوة</div><div style=\"font-size:14px;line-height:2;color:var(--creamDim);\">1) أضف 5 لطرفي المعادلة: 3x = 21<br/>2) اقسم الطرفين على 3: x = 7</div><div style=\"font-size:11px;color:var(--goldDim);margin-top:12px;\">* هذا عرض تجريبي لآلية العمل — الربط بمحرك OCR/رؤية حقيقي يحتاج خادم خلفي.</div></div>";
 });
 
 const roadmapSteps = [
-  { icon: "🏁", title: "بداية الرحلة", desc: "انضممت للمنصة وحددت هدفك: الوصول لقائمة أوائل الجمهورية.", done: true },
-  { icon: "🔥", title: "أول سلسلة دراسة 7 أيام", desc: "حافظت على المذاكرة اليومية أسبوعاً كاملاً بدون انقطاع.", done: true },
-  { icon: "📈", title: "تحسّن في 3 مواد", desc: "ارتفعت درجاتك في الرياضيات والفيزياء والكيمياء بشكل ملحوظ.", done: true },
-  { icon: "🏆", title: "دخول أفضل 20 بصفك", desc: "وصلت للمركز #15 من 500 طالب — أنت الآن ضمن الأوائل.", done: true },
-  { icon: "🎯", title: "معدل متوقع 90%+", desc: "الهدف القادم: رفع معدلك العام فوق 90% قبل الاختبارات الوزارية.", done: false },
-  { icon: "🥇", title: "قائمة أوائل الجمهورية", desc: "الهدف النهائي — استمر ولا توقف!", done: false },
+  { title: "بداية الرحلة", desc: "انضممت للمنصة وحددت هدفك: الوصول لقائمة أوائل الجمهورية.", done: true },
+  { title: "أول سلسلة دراسة 7 أيام", desc: "حافظت على المذاكرة اليومية أسبوعاً كاملاً بدون انقطاع.", done: true },
+  { title: "تحسّن في 3 مواد", desc: "ارتفعت درجاتك في الرياضيات والفيزياء والكيمياء بشكل ملحوظ.", done: true },
+  { title: "دخول أفضل 20 بصفك", desc: "وصلت للمركز #15 من 500 طالب — أنت الآن ضمن الأوائل.", done: true },
+  { title: "معدل متوقع 90%+", desc: "الهدف القادم: رفع معدلك العام فوق 90% قبل الاختبارات الوزارية.", done: false },
+  { title: "قائمة أوائل الجمهورية", desc: "الهدف النهائي — استمر ولا توقف!", done: false },
 ];
 document.getElementById("roadmapTrack").innerHTML = roadmapSteps
   .map(
-    (s) => `<div class="roadmap-step">
-      <div class="roadmap-dot" style="background:${s.done ? "var(--gold)" : "var(--panelLight)"};color:${s.done ? "var(--bg)" : "var(--creamDim)"};border:${s.done ? "none" : "1px solid var(--border)"};">${s.icon}</div>
-      <div>
-        <div style="font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;color:${s.done ? "var(--cream)" : "var(--creamDim)"};">${s.title}</div>
-        <div style="font-size:12px;color:var(--creamDim);margin-top:2px;max-width:480px;">${s.desc}</div>
-      </div>
-    </div>`
+    (s) => "<div class=\"roadmap-step\"><div class=\"roadmap-dot\" style=\"background:" + (s.done ? "var(--gold)" : "var(--panelLight)") + ";color:" + (s.done ? "var(--bg)" : "var(--creamDim)") + ";border:" + (s.done ? "none" : "1px dashed var(--border)") + ";\">" + icon(s.done ? "check" : "award", 15) + "</div><div><div style=\"font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;color:" + (s.done ? "var(--cream)" : "var(--creamDim)") + ";\">" + s.title + "</div><div style=\"font-size:12px;color:var(--creamDim);margin-top:2px;max-width:480px;\">" + s.desc + "</div></div></div>"
   )
   .join("");
 
@@ -880,86 +856,11 @@ const badgesData = [
 ];
 document.getElementById("badgesGrid").innerHTML = badgesData
   .map(
-    (b) => `<div class="card" style="text-align:center;opacity:${b.earned ? 1 : 0.4};">
-      <div style="font-size:32px;margin-bottom:8px;">${b.icon}</div>
-      <div style="font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;">${b.name}</div>
-      <div style="font-size:11px;color:var(--creamDim);margin-top:4px;">${b.desc}</div>
-      ${b.earned ? `<div style="font-size:10px;color:var(--teal);margin-top:8px;">✓ مكتسبة</div>` : `<div style="font-size:10px;color:var(--goldDim);margin-top:8px;">🔒 لم تُكتسب بعد</div>`}
-    </div>`
+    (b) => "<div class=\"card\" style=\"text-align:center;opacity:" + (b.earned ? 1 : 0.4) + ";\"><div style=\"font-size:30px;margin-bottom:8px;\">" + b.icon + "</div><div style=\"font-family:'Cairo',sans-serif;font-weight:700;font-size:13.5px;\">" + b.name + "</div><div style=\"font-size:11px;color:var(--creamDim);margin-top:4px;\">" + b.desc + "</div>" + (b.earned ? "<div style=\"font-size:10px;color:var(--teal);margin-top:8px;\">مكتسبة</div>" : "<div style=\"font-size:10px;color:var(--goldDim);margin-top:8px;\">لم تُكتسب بعد</div>") + "</div>"
   )
   .join("");
 
 renderBook();
-
-// Exam countdown
-const examDate = new Date();
-examDate.setDate(examDate.getDate() + 23);
-function updateCountdown() {
-  const diff = examDate - new Date();
-  const days = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  document.getElementById("examCountdown").textContent = `${days} يوم و ${hours} ساعة`;
-}
-updateCountdown();
-setInterval(updateCountdown, 60000);
-
-// Tutor booking
-const tutorsData = [
-  { name: "أ. سامي الحداد", subject: "الرياضيات", rating: "4.9", price: "3000 ريال / حصة", slots: ["اليوم 5 م", "غداً 4 م", "غداً 7 م"] },
-  { name: "أ. ريم الشامي", subject: "الفيزياء", rating: "4.8", price: "3500 ريال / حصة", slots: ["اليوم 6 م", "غداً 3 م"] },
-  { name: "أ. خالد مقبل", subject: "الكيمياء", rating: "4.7", price: "2800 ريال / حصة", slots: ["غداً 5 م", "بعد غد 4 م"] },
-  { name: "أ. هدى الصبري", subject: "الأحياء", rating: "5.0", price: "3200 ريال / حصة", slots: ["اليوم 8 م", "غداً 6 م"] },
-];
-document.getElementById("tutorsGrid").innerHTML = tutorsData
-  .map(
-    (t, i) => `<div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-family:'Cairo',sans-serif;font-weight:700;">${t.name}</div>
-        <span class="badge" style="color:var(--gold);">⭐ ${t.rating}</span>
-      </div>
-      <div style="font-size:12px;color:var(--teal);margin-top:4px;">${t.subject}</div>
-      <div style="font-size:12px;color:var(--creamDim);margin-top:4px;">${t.price}</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
-        ${t.slots.map((s, si) => `<button class="chip" onclick="bookTutor(${i},${si})" id="slot-${i}-${si}">${s}</button>`).join("")}
-      </div>
-    </div>`
-  )
-  .join("");
-function bookTutor(ti, si) {
-  const btn = document.getElementById(`slot-${ti}-${si}`);
-  btn.textContent = "✅ تم الحجز";
-  btn.style.background = "var(--gold)";
-  btn.style.color = "var(--bg)";
-  btn.disabled = true;
-}
-
-// Student community
-let communityPosts = [
-  { name: "سارة أحمد", time: "قبل 20 دقيقة", text: "أحد يقدر يشرح لي درس التفاضل بأسلوب مبسط؟ ما فهمته زين بالحصة 😅" },
-  { name: "محمد قاسم", time: "قبل ساعة", text: "أنهيت اليوم مراجعة كاملة لدرس الديناميكا الحرارية 🔥 اللي يبي ملخصي يقول لي." },
-  { name: "فاطمة علي", time: "قبل 3 ساعات", text: "نصيحة: قسّموا وقت المذاكرة لفترات 25 دقيقة مع راحة 5 دقايق، ساعدتني كثير هالأسبوع 💪" },
-];
-function renderCommunity() {
-  document.getElementById("communityFeed").innerHTML = communityPosts
-    .map(
-      (p) => `<div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-family:'Cairo',sans-serif;font-weight:700;font-size:13px;">${p.name}</div>
-          <div style="font-size:11px;color:var(--creamDim);">${p.time}</div>
-        </div>
-        <div style="font-size:14px;color:var(--creamDim);margin-top:6px;">${p.text}</div>
-      </div>`
-    )
-    .join("");
-}
-renderCommunity();
-document.getElementById("communityPostBtn").addEventListener("click", () => {
-  const input = document.getElementById("communityInput");
-  if (!input.value.trim()) return;
-  communityPosts.unshift({ name: "أحمد سالم (أنت)", time: "الآن", text: input.value.trim() });
-  input.value = "";
-  renderCommunity();
-});
 </script>
 </body>
 </html>
