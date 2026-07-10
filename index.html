@@ -112,6 +112,15 @@
     border:1px dashed var(--border);border-radius:12px;cursor:pointer;color:var(--cream);font-family:'Tajawal',sans-serif;font-size:12.5px;transition:border-color .15s ease;}
   .pick-btn:hover{border-color:var(--gold);}
   .pick-ico{width:44px;height:44px;border-radius:999px;background:var(--panel);display:flex;align-items:center;justify-content:center;color:var(--gold);}
+  .attach-menu{display:none;position:absolute;bottom:56px;right:0;background:var(--panel);border:1px solid var(--border);border-radius:14px;
+    padding:10px;flex-direction:column;gap:4px;box-shadow:0 10px 30px rgba(0,0,0,.4);z-index:80;min-width:170px;}
+  .attach-menu.open{display:flex;}
+  .attach-option{display:flex;align-items:center;gap:10px;background:transparent;border:none;color:var(--cream);
+    padding:9px 10px;border-radius:10px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13px;text-align:right;}
+  .attach-option:hover{background:var(--panelLight);}
+  .attach-option .pick-ico{width:32px;height:32px;background:var(--panelLight);flex-shrink:0;}
+  .attach-chip{display:flex;align-items:center;gap:6px;background:var(--panelLight);border:1px solid var(--border);border-radius:8px;padding:4px 8px;font-size:11px;color:var(--creamDim);}
+  .attach-chip button{background:none;border:none;color:var(--brick);cursor:pointer;padding:0;display:flex;}
 
   .sidebar-close-btn{display:none;}
   /* Mobile: collapsible off-canvas sidebar */
@@ -249,7 +258,26 @@
           <button class="chip" data-fill="ترجم: " data-i18n="chip_translate">ترجم</button>
           <button class="chip" data-fill="أعطني مثال: " data-i18n="chip_example">أعطني مثال</button>
         </div>
-        <div class="chat-input-row">
+        <div id="chatAttachRow" style="display:none;padding:8px 20px 0;flex-wrap:wrap;gap:8px;"></div>
+        <div class="chat-input-row" style="position:relative;">
+          <button class="icon-btn" id="attachBtn"><span class="nav-ico" data-icon="plus"></span></button>
+          <div id="attachMenu" class="attach-menu">
+            <input type="file" id="filesInputAny" multiple style="display:none;" />
+            <input type="file" id="filesInputPhotos" accept="image/*,video/*" multiple style="display:none;" />
+            <input type="file" id="filesInputCamera" accept="image/*" capture="environment" style="display:none;" />
+            <button class="attach-option" id="pickFilesBtn">
+              <span class="pick-ico"><span class="nav-ico" data-icon="file" data-size="18"></span></span>
+              <span data-i18n="pick_files">ملفات</span>
+            </button>
+            <button class="attach-option" id="pickPhotosBtn">
+              <span class="pick-ico"><span class="nav-ico" data-icon="image" data-size="18"></span></span>
+              <span data-i18n="pick_photos">صور وفيديو</span>
+            </button>
+            <button class="attach-option" id="pickCameraBtn">
+              <span class="pick-ico"><span class="nav-ico" data-icon="camera" data-size="18"></span></span>
+              <span data-i18n="pick_camera">كاميرا</span>
+            </button>
+          </div>
           <button class="icon-btn"><span class="nav-ico" data-icon="mic"></span></button>
           <textarea id="chatInput" rows="1" placeholder="اكتب سؤالك هنا..." data-i18n-placeholder="chat_placeholder"></textarea>
           <button class="send-btn" id="sendBtn"><span class="nav-ico" data-icon="send"></span></button>
@@ -291,26 +319,9 @@
 
     <section id="files" class="section">
       <h1 class="page-title" data-i18n="title_files">المكتبة والملفات</h1>
-      <div class="card">
-        <p style="color:var(--creamDim);font-size:14px;margin-bottom:16px;text-align:center;" data-i18n="files_hint">ارفع كتباً (PDF/Word)، صوراً، فيديوهات، أو حتى ملفات تطبيقات — أي نوع ملف.</p>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
-          <input type="file" id="filesInputAny" multiple style="display:none;" />
-          <input type="file" id="filesInputPhotos" accept="image/*,video/*" multiple style="display:none;" />
-          <input type="file" id="filesInputCamera" accept="image/*" capture="environment" style="display:none;" />
-          <button class="pick-btn" id="pickFilesBtn">
-            <span class="pick-ico"><span class="nav-ico" data-icon="file" data-size="22"></span></span>
-            <span data-i18n="pick_files">ملفات</span>
-          </button>
-          <button class="pick-btn" id="pickPhotosBtn">
-            <span class="pick-ico"><span class="nav-ico" data-icon="image" data-size="22"></span></span>
-            <span data-i18n="pick_photos">صور وفيديو</span>
-          </button>
-          <button class="pick-btn" id="pickCameraBtn">
-            <span class="pick-ico"><span class="nav-ico" data-icon="camera" data-size="22"></span></span>
-            <span data-i18n="pick_camera">كاميرا</span>
-          </button>
-        </div>
-        <div style="font-size:11px;color:var(--goldDim);margin-top:16px;text-align:center;" data-i18n="files_session_note">ملاحظة: الملفات تُحفظ لهذه الجلسة فقط داخل المتصفح (تُمسح عند تحديث الصفحة) — للتخزين الدائم يلزم ربط قاعدة بيانات سحابية.</div>
+      <div class="card" style="text-align:center;">
+        <p style="color:var(--creamDim);font-size:14px;margin:0;" data-i18n="files_hint2">هذه الملفات اللي رفعتها من المعلم الذكي (زر + بجانب الشات). أي كتاب، صورة، فيديو، أو ملف ترفعه يظهر هنا.</p>
+        <div style="font-size:11px;color:var(--goldDim);margin-top:10px;" data-i18n="files_session_note">ملاحظة: الملفات تُحفظ لهذه الجلسة فقط داخل المتصفح (تُمسح عند تحديث الصفحة) — للتخزين الدائم يلزم ربط قاعدة بيانات سحابية.</div>
       </div>
       <div id="filesTotalBar" style="font-size:12px;color:var(--creamDim);"></div>
       <div id="filesGrid" class="exam-grid"></div>
@@ -516,6 +527,7 @@ const ICONS = {
   upload: '<path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 21h14"/>',
   file: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/>',
   image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-5 4 4 3-3 4 4"/>',
+  plus: '<path d="M12 5v14"/><path d="M5 12h14"/>',
   trash: '<path d="M5 7h14"/><path d="M9 7V4h6v3"/><path d="M7 7l1 13h8l1-13"/>',
   dashboard: '<rect x="3.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.4"/>',
   chat: '<path d="M4 5h16v11H8l-4 4V5z"/><circle cx="9" cy="10.5" r=".7" fill="currentColor" stroke="none"/><circle cx="12" cy="10.5" r=".7" fill="currentColor" stroke="none"/><circle cx="15" cy="10.5" r=".7" fill="currentColor" stroke="none"/>',
@@ -608,8 +620,7 @@ const I18N = {
     chip_explain: "اشرح", chip_summarize: "لخص", chip_translate: "ترجم", chip_example: "أعطني مثال",
     btn_new_smart_exam: "+ اختبار ذكي جديد", btn_post: "نشر", btn_add: "إضافة", btn_choose_photo: "اختر صورة السؤال",
     stat_streak: "سلسلة الدراسة", stat_expected: "المعدل المتوقع", stat_rank: "الترتيب العام", stat_hours: "ساعات الدراسة",
-    files_hint: "ارفع كتباً (PDF/Word)، صوراً، فيديوهات، أو حتى ملفات تطبيقات — أي نوع ملف.",
-    btn_choose_files: "اختر ملفات للرفع",
+    files_hint2: "هذه الملفات اللي رفعتها من المعلم الذكي (زر + بجانب الشات). أي كتاب، صورة، فيديو، أو ملف ترفعه يظهر هنا.",
     pick_files: "ملفات", pick_photos: "صور وفيديو", pick_camera: "كاميرا",
     files_session_note: "ملاحظة: الملفات تُحفظ لهذه الجلسة فقط داخل المتصفح (تُمسح عند تحديث الصفحة) — للتخزين الدائم يلزم ربط قاعدة بيانات سحابية.",
   },
@@ -627,8 +638,7 @@ const I18N = {
     chip_explain: "Explain", chip_summarize: "Summarize", chip_translate: "Translate", chip_example: "Give example",
     btn_new_smart_exam: "+ New smart exam", btn_post: "Post", btn_add: "Add", btn_choose_photo: "Choose photo",
     stat_streak: "Study streak", stat_expected: "Expected average", stat_rank: "Overall rank", stat_hours: "Study hours",
-    files_hint: "Upload books (PDF/Word), images, videos, or even app files — any file type.",
-    btn_choose_files: "Choose files to upload",
+    files_hint2: "These are the files you uploaded from the AI Teacher (+ button next to the chat). Any book, image, video, or file you upload appears here.",
     pick_files: "Files", pick_photos: "Photos & Video", pick_camera: "Camera",
     files_session_note: "Note: files are kept for this browser session only (cleared on page refresh) — permanent storage requires connecting a cloud database.",
   },
@@ -1118,21 +1128,41 @@ function removeFile(i) {
   URL.revokeObjectURL(uploadedFiles[i].url);
   uploadedFiles.splice(i, 1);
   renderFiles();
+  renderChatAttachments();
 }
-document.getElementById("pickFilesBtn").addEventListener("click", () => document.getElementById("filesInputAny").click());
-document.getElementById("pickPhotosBtn").addEventListener("click", () => document.getElementById("filesInputPhotos").click());
-document.getElementById("pickCameraBtn").addEventListener("click", () => document.getElementById("filesInputCamera").click());
+const attachBtn = document.getElementById("attachBtn");
+const attachMenu = document.getElementById("attachMenu");
+const chatAttachRow = document.getElementById("chatAttachRow");
+attachBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  attachMenu.classList.toggle("open");
+});
+document.addEventListener("click", (e) => {
+  if (!attachMenu.contains(e.target) && e.target !== attachBtn) attachMenu.classList.remove("open");
+});
+document.getElementById("pickFilesBtn").addEventListener("click", () => { document.getElementById("filesInputAny").click(); attachMenu.classList.remove("open"); });
+document.getElementById("pickPhotosBtn").addEventListener("click", () => { document.getElementById("filesInputPhotos").click(); attachMenu.classList.remove("open"); });
+document.getElementById("pickCameraBtn").addEventListener("click", () => { document.getElementById("filesInputCamera").click(); attachMenu.classList.remove("open"); });
+function renderChatAttachments() {
+  if (!uploadedFiles.length) { chatAttachRow.style.display = "none"; chatAttachRow.innerHTML = ""; return; }
+  chatAttachRow.style.display = "flex";
+  chatAttachRow.innerHTML = uploadedFiles
+    .map((item, i) => "<span class=\"attach-chip\">" + icon(item.kind === "image" ? "image" : "file", 13) + " " + item.file.name.slice(0, 18) + "<button onclick=\"removeFile(" + i + ")\">" + icon("xmark", 12) + "</button></span>")
+    .join("");
+}
 function handleFileSelection(e) {
   Array.from(e.target.files).forEach((file) => {
     uploadedFiles.push({ file, kind: fileKind(file), url: URL.createObjectURL(file) });
   });
   e.target.value = "";
   renderFiles();
+  renderChatAttachments();
 }
 document.getElementById("filesInputAny").addEventListener("change", handleFileSelection);
 document.getElementById("filesInputPhotos").addEventListener("change", handleFileSelection);
 document.getElementById("filesInputCamera").addEventListener("change", handleFileSelection);
 renderFiles();
+renderChatAttachments();
 </script>
 </body>
 </html>
