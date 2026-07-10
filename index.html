@@ -108,6 +108,10 @@
   .roadmap-step{display:flex;gap:16px;padding-bottom:24px;position:relative;}
   .roadmap-step:not(:last-child)::before{content:"";position:absolute;right:15px;top:32px;bottom:0;width:2px;background:var(--border);}
   .roadmap-dot{width:32px;height:32px;border-radius:999px;flex-shrink:0;display:flex;align-items:center;justify-content:center;z-index:1;}
+  .pick-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px;background:var(--panelLight);
+    border:1px dashed var(--border);border-radius:12px;cursor:pointer;color:var(--cream);font-family:'Tajawal',sans-serif;font-size:12.5px;transition:border-color .15s ease;}
+  .pick-btn:hover{border-color:var(--gold);}
+  .pick-ico{width:44px;height:44px;border-radius:999px;background:var(--panel);display:flex;align-items:center;justify-content:center;color:var(--gold);}
 
   .sidebar-close-btn{display:none;}
   /* Mobile: collapsible off-canvas sidebar */
@@ -287,12 +291,26 @@
 
     <section id="files" class="section">
       <h1 class="page-title" data-i18n="title_files">المكتبة والملفات</h1>
-      <div class="card" style="text-align:center;padding:36px 20px;">
-        <div style="display:flex;justify-content:center;margin-bottom:10px;"><span class="nav-ico" data-icon="upload" data-size="32" style="color:var(--gold);"></span></div>
-        <p style="color:var(--creamDim);font-size:14px;margin-bottom:14px;" data-i18n="files_hint">ارفع كتباً (PDF/Word)، صوراً، فيديوهات، أو حتى ملفات تطبيقات — أي نوع ملف.</p>
-        <input type="file" id="filesInput" multiple style="display:none;" />
-        <button class="btn-gold" id="filesUploadBtn" data-i18n="btn_choose_files">اختر ملفات للرفع</button>
-        <div style="font-size:11px;color:var(--goldDim);margin-top:10px;" data-i18n="files_session_note">ملاحظة: الملفات تُحفظ لهذه الجلسة فقط داخل المتصفح (تُمسح عند تحديث الصفحة) — للتخزين الدائم يلزم ربط قاعدة بيانات سحابية.</div>
+      <div class="card">
+        <p style="color:var(--creamDim);font-size:14px;margin-bottom:16px;text-align:center;" data-i18n="files_hint">ارفع كتباً (PDF/Word)، صوراً، فيديوهات، أو حتى ملفات تطبيقات — أي نوع ملف.</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+          <input type="file" id="filesInputAny" multiple style="display:none;" />
+          <input type="file" id="filesInputPhotos" accept="image/*,video/*" multiple style="display:none;" />
+          <input type="file" id="filesInputCamera" accept="image/*" capture="environment" style="display:none;" />
+          <button class="pick-btn" id="pickFilesBtn">
+            <span class="pick-ico"><span class="nav-ico" data-icon="file" data-size="22"></span></span>
+            <span data-i18n="pick_files">ملفات</span>
+          </button>
+          <button class="pick-btn" id="pickPhotosBtn">
+            <span class="pick-ico"><span class="nav-ico" data-icon="image" data-size="22"></span></span>
+            <span data-i18n="pick_photos">صور وفيديو</span>
+          </button>
+          <button class="pick-btn" id="pickCameraBtn">
+            <span class="pick-ico"><span class="nav-ico" data-icon="camera" data-size="22"></span></span>
+            <span data-i18n="pick_camera">كاميرا</span>
+          </button>
+        </div>
+        <div style="font-size:11px;color:var(--goldDim);margin-top:16px;text-align:center;" data-i18n="files_session_note">ملاحظة: الملفات تُحفظ لهذه الجلسة فقط داخل المتصفح (تُمسح عند تحديث الصفحة) — للتخزين الدائم يلزم ربط قاعدة بيانات سحابية.</div>
       </div>
       <div id="filesTotalBar" style="font-size:12px;color:var(--creamDim);"></div>
       <div id="filesGrid" class="exam-grid"></div>
@@ -497,6 +515,7 @@ const ICONS = {
   menu: '<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>',
   upload: '<path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 21h14"/>',
   file: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/>',
+  image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-5 4 4 3-3 4 4"/>',
   trash: '<path d="M5 7h14"/><path d="M9 7V4h6v3"/><path d="M7 7l1 13h8l1-13"/>',
   dashboard: '<rect x="3.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.4"/>',
   chat: '<path d="M4 5h16v11H8l-4 4V5z"/><circle cx="9" cy="10.5" r=".7" fill="currentColor" stroke="none"/><circle cx="12" cy="10.5" r=".7" fill="currentColor" stroke="none"/><circle cx="15" cy="10.5" r=".7" fill="currentColor" stroke="none"/>',
@@ -591,6 +610,7 @@ const I18N = {
     stat_streak: "سلسلة الدراسة", stat_expected: "المعدل المتوقع", stat_rank: "الترتيب العام", stat_hours: "ساعات الدراسة",
     files_hint: "ارفع كتباً (PDF/Word)، صوراً، فيديوهات، أو حتى ملفات تطبيقات — أي نوع ملف.",
     btn_choose_files: "اختر ملفات للرفع",
+    pick_files: "ملفات", pick_photos: "صور وفيديو", pick_camera: "كاميرا",
     files_session_note: "ملاحظة: الملفات تُحفظ لهذه الجلسة فقط داخل المتصفح (تُمسح عند تحديث الصفحة) — للتخزين الدائم يلزم ربط قاعدة بيانات سحابية.",
   },
   en: {
@@ -609,6 +629,7 @@ const I18N = {
     stat_streak: "Study streak", stat_expected: "Expected average", stat_rank: "Overall rank", stat_hours: "Study hours",
     files_hint: "Upload books (PDF/Word), images, videos, or even app files — any file type.",
     btn_choose_files: "Choose files to upload",
+    pick_files: "Files", pick_photos: "Photos & Video", pick_camera: "Camera",
     files_session_note: "Note: files are kept for this browser session only (cleared on page refresh) — permanent storage requires connecting a cloud database.",
   },
 };
@@ -1098,14 +1119,19 @@ function removeFile(i) {
   uploadedFiles.splice(i, 1);
   renderFiles();
 }
-document.getElementById("filesUploadBtn").addEventListener("click", () => document.getElementById("filesInput").click());
-document.getElementById("filesInput").addEventListener("change", (e) => {
+document.getElementById("pickFilesBtn").addEventListener("click", () => document.getElementById("filesInputAny").click());
+document.getElementById("pickPhotosBtn").addEventListener("click", () => document.getElementById("filesInputPhotos").click());
+document.getElementById("pickCameraBtn").addEventListener("click", () => document.getElementById("filesInputCamera").click());
+function handleFileSelection(e) {
   Array.from(e.target.files).forEach((file) => {
     uploadedFiles.push({ file, kind: fileKind(file), url: URL.createObjectURL(file) });
   });
   e.target.value = "";
   renderFiles();
-});
+}
+document.getElementById("filesInputAny").addEventListener("change", handleFileSelection);
+document.getElementById("filesInputPhotos").addEventListener("change", handleFileSelection);
+document.getElementById("filesInputCamera").addEventListener("change", handleFileSelection);
 renderFiles();
 </script>
 </body>
