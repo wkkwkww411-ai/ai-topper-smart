@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AI Topper Smart — منصة تعليمية ذكية لطالب الجمهورية اليمنية</title>
-<meta name="description" content="منصة AI Topper Smart تستخدم الذكاء الاصطناعي لمساعدة طلاب الصف التاسع والثالث الثانوي في اليمن على التفوق." />
+<title>AI Topper Smart — منصة تعليمية ذكية لطلاب الوطن العربي</title>
+<meta name="description" content="منصة AI Topper Smart تستخدم الذكاء الاصطناعي لمساعدة الطلاب من جميع الدول العربية وكل المراحل الدراسية على التفوق." />
 <meta name="theme-color" content="#16332C" />
 <link rel="icon" type="image/png" href="icon-192.png" />
 <link rel="apple-touch-icon" href="icon-192.png" />
@@ -151,6 +151,9 @@
         <div class="sub">SMART</div>
       </div>
       <button class="sidebar-close-btn" id="sidebarCloseBtn" style="margin-inline-start:auto;"><span class="nav-ico" data-icon="xmark" data-size="20"></span></button>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:8px;">
+      <select id="countrySelect" style="flex:1;background:var(--panelLight);border:1px solid var(--border);border-radius:8px;color:var(--cream);font-size:11.5px;padding:7px 6px;"></select>
     </div>
     <div style="display:flex;gap:6px;margin-bottom:16px;">
       <select id="gradeSelect" style="flex:1;background:var(--panelLight);border:1px solid var(--border);border-radius:8px;color:var(--cream);font-size:11.5px;padding:7px 6px;"></select>
@@ -387,7 +390,7 @@
     <section id="roadmap" class="section">
       <h1 class="page-title" data-i18n="title_roadmap">خريطة النجاح</h1>
       <div class="card">
-        <p style="font-size:14px;color:var(--creamDim);margin-bottom:24px;">مسارك نحو قائمة أوائل الجمهورية — كل نقطة إنجاز فعلي بنيت عليه.</p>
+        <p style="font-size:14px;color:var(--creamDim);margin-bottom:24px;" id="roadmapIntro">مسارك نحو قائمة أوائل بلدك — كل نقطة إنجاز فعلي بنيت عليه.</p>
         <div id="roadmapTrack" style="display:flex;flex-direction:column;gap:0;"></div>
       </div>
     </section>
@@ -405,6 +408,7 @@
           <div style="font-family:'Cairo',sans-serif;font-weight:700;font-size:17px;">أحمد سالم</div>
           <div style="font-size:12px;color:var(--creamDim);">الصف الثالث الثانوي — علمي</div>
           <div class="kv"><span style="color:var(--creamDim);">تاريخ الانضمام</span><span>1 سبتمبر 2025</span></div>
+          <div class="kv"><span style="color:var(--creamDim);">الدولة</span><span id="profileCountryValue">اليمن</span></div>
           <div class="kv"><span style="color:var(--creamDim);">الترتيب العام</span><span style="color:var(--gold);">#15 من 500</span></div>
           <div class="kv"><span style="color:var(--creamDim);">سلسلة الدراسة</span><span style="color:var(--brick);">12 يوم</span></div>
         </div>
@@ -508,6 +512,29 @@ document.querySelectorAll("[data-icon]").forEach((el) => {
   el.innerHTML = icon(el.dataset.icon, el.dataset.size ? +el.dataset.size : 20);
 });
 
+// ---------- Arab countries (all 22 Arab League members) ----------
+const COUNTRIES = {
+  ar: ["اليمن","السعودية","الإمارات","قطر","البحرين","الكويت","عُمان","العراق","الأردن","فلسطين","لبنان","سوريا","مصر","السودان","ليبيا","تونس","الجزائر","المغرب","موريتانيا","الصومال","جيبوتي","جزر القمر"],
+  en: ["Yemen","Saudi Arabia","UAE","Qatar","Bahrain","Kuwait","Oman","Iraq","Jordan","Palestine","Lebanon","Syria","Egypt","Sudan","Libya","Tunisia","Algeria","Morocco","Mauritania","Somalia","Djibouti","Comoros"],
+};
+let currentCountryIndex = 0; // default: Yemen
+const countrySelect = document.getElementById("countrySelect");
+function renderCountryOptions() {
+  countrySelect.innerHTML = COUNTRIES[currentLang].map((c, i) => `<option value="${i}" ${i === currentCountryIndex ? "selected" : ""}>${c}</option>`).join("");
+}
+countrySelect.addEventListener("change", (e) => {
+  currentCountryIndex = +e.target.value;
+  updateCountryDisplays();
+});
+function updateCountryDisplays() {
+  const country = COUNTRIES[currentLang][currentCountryIndex];
+  const suffix = currentLang === "ar" ? ` — ${country}` : ` — ${country}`;
+  const rankSub = document.querySelector("#dashboard .stats .card:nth-child(3) .stat-sub");
+  if (rankSub) rankSub.textContent = (currentLang === "ar" ? "من 500 طالب" : "of 500 students") + suffix;
+  const profileCountryRow = document.getElementById("profileCountryValue");
+  if (profileCountryRow) profileCountryRow.textContent = country;
+}
+
 // ---------- Grade levels (1st grade through 3rd secondary) ----------
 const GRADES = {
   ar: ["الصف الأول الابتدائي","الصف الثاني الابتدائي","الصف الثالث الابتدائي","الصف الرابع الابتدائي","الصف الخامس الابتدائي","الصف السادس الابتدائي","الصف السابع (الأول إعدادي)","الصف الثامن (الثاني إعدادي)","الصف التاسع (الثالث إعدادي)","الصف العاشر (الأول ثانوي)","الصف الحادي عشر (الثاني ثانوي)","الصف الثاني عشر (الثالث ثانوي)"],
@@ -540,7 +567,7 @@ const I18N = {
     title_challenge: "وضع التحدي", title_tutors: "حجز المدرسين", title_community: "مجتمع الطلاب",
     title_time: "جدولك اليوم", title_parent: "بوابة ولي الأمر", title_roadmap: "خريطة النجاح",
     title_achievements: "الإنجازات", title_profile: "الملف الشخصي",
-    hero_eyebrow: "سلسلة الدراسة 12 يوماً", hero_desc: "استمر في وتيرتك، سلسلة دراستك المتواصلة تقربك من قائمة أوائل الجمهورية.",
+    hero_eyebrow: "سلسلة الدراسة 12 يوماً", hero_desc: "استمر في وتيرتك، سلسلة دراستك المتواصلة تقربك من قائمة أوائل بلدك.",
     chat_title: "المعلم الذكي", chat_status: "متصل الآن",
     chip_explain: "اشرح", chip_summarize: "لخص", chip_translate: "ترجم", chip_example: "أعطني مثال",
     btn_new_smart_exam: "+ اختبار ذكي جديد", btn_post: "نشر", btn_add: "إضافة", btn_choose_photo: "اختر صورة السؤال",
@@ -555,7 +582,7 @@ const I18N = {
     title_challenge: "Challenge Mode", title_tutors: "Book a Tutor", title_community: "Student Community",
     title_time: "Today's Schedule", title_parent: "Parent Portal", title_roadmap: "Success Roadmap",
     title_achievements: "Achievements", title_profile: "Profile",
-    hero_eyebrow: "12-day study streak", hero_desc: "Keep up the pace — your streak is bringing you closer to the national top-students list.",
+    hero_eyebrow: "12-day study streak", hero_desc: "Keep up the pace — your streak is bringing you closer to your country's top-students list.",
     chat_title: "AI Teacher", chat_status: "Online now",
     chip_explain: "Explain", chip_summarize: "Summarize", chip_translate: "Translate", chip_example: "Give example",
     btn_new_smart_exam: "+ New smart exam", btn_post: "Post", btn_add: "Add", btn_choose_photo: "Choose photo",
@@ -588,12 +615,16 @@ function applyTranslations(lang) {
   document.getElementById("langToggleBtn").textContent = lang === "ar" ? "EN" : "عربي";
   renderGradeOptions();
   updateGradeDisplays();
+  renderCountryOptions();
+  updateCountryDisplays();
 }
 document.getElementById("langToggleBtn").addEventListener("click", () => {
   applyTranslations(currentLang === "ar" ? "en" : "ar");
 });
 renderGradeOptions();
 updateGradeDisplays();
+renderCountryOptions();
+updateCountryDisplays();
 
 // Mobile collapsible sidebar drawer
 const sidebarEl = document.getElementById("sidebar");
@@ -971,12 +1002,12 @@ document.getElementById("solverInput").addEventListener("change", async (e) => {
 });
 
 const roadmapSteps = [
-  { title: "بداية الرحلة", desc: "انضممت للمنصة وحددت هدفك: الوصول لقائمة أوائل الجمهورية.", done: true },
+  { title: "بداية الرحلة", desc: "انضممت للمنصة وحددت هدفك: الوصول لقائمة أوائل بلدك.", done: true },
   { title: "أول سلسلة دراسة 7 أيام", desc: "حافظت على المذاكرة اليومية أسبوعاً كاملاً بدون انقطاع.", done: true },
   { title: "تحسّن في 3 مواد", desc: "ارتفعت درجاتك في الرياضيات والفيزياء والكيمياء بشكل ملحوظ.", done: true },
   { title: "دخول أفضل 20 بصفك", desc: "وصلت للمركز #15 من 500 طالب — أنت الآن ضمن الأوائل.", done: true },
   { title: "معدل متوقع 90%+", desc: "الهدف القادم: رفع معدلك العام فوق 90% قبل الاختبارات الوزارية.", done: false },
-  { title: "قائمة أوائل الجمهورية", desc: "الهدف النهائي — استمر ولا توقف!", done: false },
+  { title: "قائمة أوائل بلدك", desc: "الهدف النهائي — استمر ولا توقف!", done: false },
 ];
 document.getElementById("roadmapTrack").innerHTML = roadmapSteps
   .map(
@@ -992,7 +1023,7 @@ const badgesData = [
   { icon: "🥇", name: "من الأوائل", desc: "دخلت أفضل 20 طالباً بصفك", earned: true },
   { icon: "🌙", name: "ساهر الليل", desc: "ذاكرت بعد الساعة 11 مساءً 5 مرات", earned: true },
   { icon: "🧪", name: "عالم كيمياء", desc: "علامة كاملة في اختبار كيمياء", earned: false },
-  { icon: "🏆", name: "أول الجمهورية", desc: "الوصول لقائمة أوائل الجمهورية", earned: false },
+  { icon: "🏆", name: "الأول على مستوى بلدك", desc: "الوصول لقائمة الأوائل على مستوى بلدك", earned: false },
 ];
 document.getElementById("badgesGrid").innerHTML = badgesData
   .map(
