@@ -163,6 +163,7 @@
       <button class="active" data-target="dashboard"><span class="nav-ico" data-icon="dashboard"></span><span class="label" data-i18n="nav_dashboard">لوحة التحكم</span></button>
       <button data-target="teacher"><span class="nav-ico" data-icon="chat"></span><span class="label" data-i18n="nav_teacher">المعلم الذكي</span></button>
       <button data-target="book"><span class="nav-ico" data-icon="book"></span><span class="label" data-i18n="nav_book">الكراسة الرقمية</span></button>
+      <button data-target="files"><span class="nav-ico" data-icon="upload"></span><span class="label" data-i18n="nav_files">المكتبة والملفات</span></button>
       <button data-target="exams"><span class="nav-ico" data-icon="clipboard"></span><span class="label" data-i18n="nav_exams">الاختبارات</span></button>
       <button data-target="solver"><span class="nav-ico" data-icon="camera"></span><span class="label" data-i18n="nav_solver">حل المسائل بالتصوير</span></button>
       <button data-target="challenge"><span class="nav-ico" data-icon="trophy"></span><span class="label" data-i18n="nav_challenge">وضع التحدي</span></button>
@@ -282,6 +283,19 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <section id="files" class="section">
+      <h1 class="page-title" data-i18n="title_files">المكتبة والملفات</h1>
+      <div class="card" style="text-align:center;padding:36px 20px;">
+        <div style="display:flex;justify-content:center;margin-bottom:10px;"><span class="nav-ico" data-icon="upload" data-size="32" style="color:var(--gold);"></span></div>
+        <p style="color:var(--creamDim);font-size:14px;margin-bottom:14px;" data-i18n="files_hint">ارفع كتباً (PDF/Word)، صوراً، فيديوهات، أو حتى ملفات تطبيقات — أي نوع ملف.</p>
+        <input type="file" id="filesInput" multiple style="display:none;" />
+        <button class="btn-gold" id="filesUploadBtn" data-i18n="btn_choose_files">اختر ملفات للرفع</button>
+        <div style="font-size:11px;color:var(--goldDim);margin-top:10px;" data-i18n="files_session_note">ملاحظة: الملفات تُحفظ لهذه الجلسة فقط داخل المتصفح (تُمسح عند تحديث الصفحة) — للتخزين الدائم يلزم ربط قاعدة بيانات سحابية.</div>
+      </div>
+      <div id="filesTotalBar" style="font-size:12px;color:var(--creamDim);"></div>
+      <div id="filesGrid" class="exam-grid"></div>
     </section>
 
     <section id="exams" class="section">
@@ -481,6 +495,9 @@ const schedule = [
 const ICONS = {
   arch: '<path d="M5 20V11a7 7 0 0 1 14 0v9"/><path d="M5 20h14"/>',
   menu: '<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>',
+  upload: '<path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 21h14"/>',
+  file: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/>',
+  trash: '<path d="M5 7h14"/><path d="M9 7V4h6v3"/><path d="M7 7l1 13h8l1-13"/>',
   dashboard: '<rect x="3.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.4"/>',
   chat: '<path d="M4 5h16v11H8l-4 4V5z"/><circle cx="9" cy="10.5" r=".7" fill="currentColor" stroke="none"/><circle cx="12" cy="10.5" r=".7" fill="currentColor" stroke="none"/><circle cx="15" cy="10.5" r=".7" fill="currentColor" stroke="none"/>',
   book: '<path d="M4 5.5C6 4.5 9 4.5 12 5.5V19.5C9 18.5 6 18.5 4 19.5V5.5Z"/><path d="M20 5.5C18 4.5 15 4.5 12 5.5V19.5C15 18.5 18 18.5 20 19.5V5.5Z"/>',
@@ -559,11 +576,11 @@ function updateGradeDisplays() {
 // ---------- Bilingual support (Arabic / English) ----------
 const I18N = {
   ar: {
-    nav_dashboard: "لوحة التحكم", nav_teacher: "المعلم الذكي", nav_book: "الكراسة الرقمية",
+    nav_dashboard: "لوحة التحكم", nav_teacher: "المعلم الذكي", nav_book: "الكراسة الرقمية", nav_files: "المكتبة والملفات",
     nav_exams: "الاختبارات", nav_solver: "حل المسائل بالتصوير", nav_challenge: "وضع التحدي",
     nav_tutors: "حجز المدرسين", nav_community: "مجتمع الطلاب", nav_time: "إدارة الوقت",
     nav_parent: "بوابة ولي الأمر", nav_roadmap: "خريطة النجاح", nav_achievements: "الإنجازات", nav_profile: "الملف الشخصي",
-    title_book: "الكراسة الرقمية — الرياضيات", title_exams: "مركز الاختبارات", title_solver: "حل المسائل بالتصوير",
+    title_book: "الكراسة الرقمية — الرياضيات", title_files: "المكتبة والملفات", title_exams: "مركز الاختبارات", title_solver: "حل المسائل بالتصوير",
     title_challenge: "وضع التحدي", title_tutors: "حجز المدرسين", title_community: "مجتمع الطلاب",
     title_time: "جدولك اليوم", title_parent: "بوابة ولي الأمر", title_roadmap: "خريطة النجاح",
     title_achievements: "الإنجازات", title_profile: "الملف الشخصي",
@@ -572,13 +589,16 @@ const I18N = {
     chip_explain: "اشرح", chip_summarize: "لخص", chip_translate: "ترجم", chip_example: "أعطني مثال",
     btn_new_smart_exam: "+ اختبار ذكي جديد", btn_post: "نشر", btn_add: "إضافة", btn_choose_photo: "اختر صورة السؤال",
     stat_streak: "سلسلة الدراسة", stat_expected: "المعدل المتوقع", stat_rank: "الترتيب العام", stat_hours: "ساعات الدراسة",
+    files_hint: "ارفع كتباً (PDF/Word)، صوراً، فيديوهات، أو حتى ملفات تطبيقات — أي نوع ملف.",
+    btn_choose_files: "اختر ملفات للرفع",
+    files_session_note: "ملاحظة: الملفات تُحفظ لهذه الجلسة فقط داخل المتصفح (تُمسح عند تحديث الصفحة) — للتخزين الدائم يلزم ربط قاعدة بيانات سحابية.",
   },
   en: {
-    nav_dashboard: "Dashboard", nav_teacher: "AI Teacher", nav_book: "Digital Notebook",
+    nav_dashboard: "Dashboard", nav_teacher: "AI Teacher", nav_book: "Digital Notebook", nav_files: "Library & Files",
     nav_exams: "Exams", nav_solver: "Photo Problem Solver", nav_challenge: "Challenge Mode",
     nav_tutors: "Book a Tutor", nav_community: "Student Community", nav_time: "Time Management",
     nav_parent: "Parent Portal", nav_roadmap: "Success Roadmap", nav_achievements: "Achievements", nav_profile: "Profile",
-    title_book: "Digital Notebook — Math", title_exams: "Exam Center", title_solver: "Photo Problem Solver",
+    title_book: "Digital Notebook — Math", title_files: "Library & Files", title_exams: "Exam Center", title_solver: "Photo Problem Solver",
     title_challenge: "Challenge Mode", title_tutors: "Book a Tutor", title_community: "Student Community",
     title_time: "Today's Schedule", title_parent: "Parent Portal", title_roadmap: "Success Roadmap",
     title_achievements: "Achievements", title_profile: "Profile",
@@ -587,6 +607,9 @@ const I18N = {
     chip_explain: "Explain", chip_summarize: "Summarize", chip_translate: "Translate", chip_example: "Give example",
     btn_new_smart_exam: "+ New smart exam", btn_post: "Post", btn_add: "Add", btn_choose_photo: "Choose photo",
     stat_streak: "Study streak", stat_expected: "Expected average", stat_rank: "Overall rank", stat_hours: "Study hours",
+    files_hint: "Upload books (PDF/Word), images, videos, or even app files — any file type.",
+    btn_choose_files: "Choose files to upload",
+    files_session_note: "Note: files are kept for this browser session only (cleared on page refresh) — permanent storage requires connecting a cloud database.",
   },
 };
 const HERO_TITLE_HTML = {
@@ -1032,6 +1055,58 @@ document.getElementById("badgesGrid").innerHTML = badgesData
   .join("");
 
 renderBook();
+
+// ---------- Files & Library (session-only client-side storage) ----------
+let uploadedFiles = [];
+function formatBytes(bytes) {
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+  return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+}
+function fileKind(file) {
+  if (file.type.startsWith("image/")) return "image";
+  if (file.type.startsWith("video/")) return "video";
+  if (file.type === "application/pdf") return "pdf";
+  if (file.name.endsWith(".apk") || file.type === "application/vnd.android.package-archive") return "app";
+  return "other";
+}
+function renderFiles() {
+  const totalBytes = uploadedFiles.reduce((sum, f) => sum + f.file.size, 0);
+  document.getElementById("filesTotalBar").textContent =
+    (currentLang === "ar" ? "الملفات المرفوعة: " : "Uploaded files: ") + uploadedFiles.length +
+    (currentLang === "ar" ? " — الحجم الإجمالي: " : " — total size: ") + formatBytes(totalBytes);
+
+  document.getElementById("filesGrid").innerHTML = uploadedFiles
+    .map((item, i) => {
+      let preview = "";
+      if (item.kind === "image") {
+        preview = "<img src=\"" + item.url + "\" style=\"width:100%;height:130px;object-fit:cover;border-radius:8px;margin-bottom:8px;\" />";
+      } else if (item.kind === "video") {
+        preview = "<video src=\"" + item.url + "\" controls style=\"width:100%;height:130px;border-radius:8px;margin-bottom:8px;background:#000;\"></video>";
+      } else {
+        preview = "<div style=\"height:130px;display:flex;align-items:center;justify-content:center;background:var(--panelLight);border-radius:8px;margin-bottom:8px;color:var(--gold);\">" + icon("file", 34) + "</div>";
+      }
+      return "<div class=\"card\">" + preview +
+        "<div style=\"font-size:12.5px;font-weight:700;word-break:break-all;\">" + item.file.name + "</div>" +
+        "<div style=\"font-size:11px;color:var(--creamDim);margin-top:4px;display:flex;justify-content:space-between;\"><span>" + item.kind.toUpperCase() + "</span><span>" + formatBytes(item.file.size) + "</span></div>" +
+        "<button class=\"exam-btn\" style=\"display:flex;align-items:center;justify-content:center;gap:6px;color:var(--brick);border-color:var(--brick);\" onclick=\"removeFile(" + i + ")\">" + icon("trash", 14) + " " + (currentLang === "ar" ? "حذف" : "Remove") + "</button></div>";
+    })
+    .join("");
+}
+function removeFile(i) {
+  URL.revokeObjectURL(uploadedFiles[i].url);
+  uploadedFiles.splice(i, 1);
+  renderFiles();
+}
+document.getElementById("filesUploadBtn").addEventListener("click", () => document.getElementById("filesInput").click());
+document.getElementById("filesInput").addEventListener("change", (e) => {
+  Array.from(e.target.files).forEach((file) => {
+    uploadedFiles.push({ file, kind: fileKind(file), url: URL.createObjectURL(file) });
+  });
+  e.target.value = "";
+  renderFiles();
+});
+renderFiles();
 </script>
 </body>
 </html>
